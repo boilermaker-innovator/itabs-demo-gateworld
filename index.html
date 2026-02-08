@@ -1,2105 +1,717 @@
-
-<br>
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>👍i Mobile Demo</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .demo-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .demo-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        
-        .demo-subtitle {
-            font-size: 16px;
-            color: #666;
-        }
-
-        /* 👍i Widget Styles */
-        #thumbs-widget {
-            position: relative;
-            z-index: 1000;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 400px;
-        }
-
-        #thumbs-button {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            cursor: pointer;
-            position: relative;
-            user-select: none;
-            transition: transform 0.2s;
-        }
-        
-        #thumbs-button:active {
-            transform: scale(0.95);
-        }
-
-        #i-indicator {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 32px;
-            height: 32px;
-            background: #4361ee;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-style: italic;
-            font-weight: bold;
-        }
-
-        .thumbs-popup {
-            position: absolute;
-            left: 0;
-            right: 0;
-            margin: 20px auto;
-            background: white;
-            width: 100%;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            display: none;
-        }
-
-        .popup-title {
-            font-weight: bold;
-            margin-bottom: 25px;
-            color: #333;
-            font-size: 20px;
-            text-align: center;
-        }
-
-        .reaction-option {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            margin-bottom: 15px;
-            background: #f8f9fa;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 18px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .reaction-option:active {
-            background: #e9ecef;
-        }
-
-        .emoji {
-            font-size: 30px;
-            margin-right: 15px;
-        }
-
-        .thumbs-close-button {
-            color: #4361ee;
-            text-align: center;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 18px;
-            padding: 10px;
-            font-weight: 600;
-        }
-
-        .stats-item {
-            margin: 20px 0;
-            font-size: 16px;
-        }
-
-        .progress-bar {
-            height: 12px;
-            background: #e9ecef;
-            border-radius: 6px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background: #4361ee;
-            width: 0%;
-            transition: width 0.5s ease-out;
-        }
-        
-        .stats-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .stats-code-button {
-            background: #4361ee;
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            flex: 1;
-            margin-right: 10px;
-        }
-        
-        /* Code Popup */
-        #code-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        
-        .popup-content {
-            background: white;
-            width: 90%;
-            max-width: 90%;
-            height: 90%;
-            max-height: 90%;
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .popup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .popup-title {
-            font-weight: bold;
-            font-size: 18px;
-            text-align: left;
-            margin-bottom: 0;
-        }
-        
-        .close-button {
-            font-size: 28px;
-            line-height: 1;
-            cursor: pointer;
-            color: #666;
-            padding: 5px;
-        }
-        
-        .popup-tabs {
-            display: flex;
-            background: #f0f2f5;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .popup-tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            background: none;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            color: #666;
-            cursor: pointer;
-        }
-        
-        .popup-tab.active {
-            background: white;
-            color: #4361ee;
-            border-bottom: 3px solid #4361ee;
-        }
-        
-        .tab-content {
-            display: none;
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        #code-tab {
-            height: 100%;
-        }
-        
-        #code-content {
-            width: 100%;
-            height: 100%;
-            border: none;
-            resize: none;
-            padding: 20px;
-            font-family: monospace;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-        
-        #customize-content {
-            padding: 20px;
-        }
-        
-        .customize-section {
-            margin-bottom: 25px;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-        }
-        
-        .customize-section h3 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #333;
-            font-size: 18px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        
-        .emoji-input {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .emoji-input input[type="text"] {
-            width: 60px;
-            font-size: 20px;
-            text-align: center;
-        }
-        
-        .emoji-input .reaction-text {
-            flex-grow: 1;
-        }
-        
-        .popup-footer {
-            padding: 15px 20px;
-            background: #f8f9fa;
-            border-top: 1px solid #eee;
-            display: flex;
-            align-items: center;
-        }
-        
-        .footer-buttons {
-            display: flex;
-            gap: 10px;
-            margin-left: auto;
-        }
-        
-        .update-button {
-            background: #34a853;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        .copy-button {
-            background: #4361ee;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        .success-message {
-            display: none;
-            background: #d4edda;
-            color: #155724;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-right: 15px;
-            font-weight: 600;
-        }
-        
-        /* Instructions */
-        .instructions {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 400px;
-        }
-        
-        .instructions h2 {
-            margin-bottom: 15px;
-            color: #333;
-        }
-        
-        .step {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        
-        .step-number {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            background: #4361ee;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 28px;
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            z-index: 3000;
-            display: none;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Gateworld Perth — Instant Gate Estimator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  html, body { 
+    min-height: 100vh; 
+    font-family: 'DM Sans', sans-serif; 
+    background: linear-gradient(180deg, #f5f0eb 0%, #e8e2da 100%);
+    color: #1a1a2e;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  .container {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 24px 16px 40px;
+  }
+  
+  /* Header */
+  .header { text-align: center; margin-bottom: 28px; }
+  .header-brand { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #9ca3af; margin-bottom: 6px; }
+  .header-title { font-size: 20px; font-weight: 700; font-family: 'Playfair Display', serif; color: #1a1a2e; }
+  .header-line { width: 40px; height: 3px; background: #e8a838; border-radius: 2px; margin: 12px auto 0; }
+  .header-rating { margin-top: 12px; font-size: 13px; color: #9ca3af; }
+  .header-rating span { color: #e8a838; }
+  
+  /* Card */
+  .card {
+    background: #fff;
+    border-radius: 20px;
+    padding: 28px 24px;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+  .card.animating { opacity: 0; transform: translateX(-12px); }
+  
+  /* Steps */
+  .steps { display: flex; align-items: center; gap: 5px; margin-bottom: 24px; }
+  .step-dot {
+    height: 6px; border-radius: 3px; background: #e0dbd4;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); flex: 1;
+  }
+  .step-dot.active { background: #e8a838; flex: 2; }
+  .step-dot.done { background: #e8a838; }
+  .step-label {
+    margin-left: 6px; font-size: 11px; color: #9ca3af;
+    letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
+  }
+  
+  /* Section */
+  .section-title {
+    font-size: 22px; font-weight: 700; font-family: 'Playfair Display', serif;
+    color: #1a1a2e; margin-bottom: 4px; line-height: 1.2;
+  }
+  .section-subtitle { font-size: 13px; color: #9ca3af; margin-bottom: 22px; line-height: 1.5; }
+  
+  /* Option Cards */
+  .option {
+    padding: 16px; border-radius: 14px; border: 2px solid #e8e2da;
+    background: #fff; cursor: pointer; transition: all 0.2s ease;
+    margin-bottom: 8px; position: relative; -webkit-user-select: none; user-select: none;
+  }
+  .option:active { transform: scale(0.98); }
+  .option.selected {
+    border-color: #e8a838;
+    background: linear-gradient(135deg, #fdf6ec, #fef9f1);
+    box-shadow: 0 4px 16px rgba(232,168,56,0.1);
+  }
+  .option-check {
+    position: absolute; top: 10px; right: 10px; width: 20px; height: 20px;
+    border-radius: 10px; background: #e8a838; display: none;
+    align-items: center; justify-content: center; font-size: 11px; color: #fff; font-weight: 700;
+  }
+  .option.selected .option-check { display: flex; }
+  
+  .option-row { display: flex; align-items: center; gap: 14px; }
+  .option-icon {
+    width: 50px; height: 50px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+  }
+  .option-name { font-size: 15px; font-weight: 600; color: #1a1a2e; }
+  .option-desc { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+  .option-price { font-size: 12px; color: #e8a838; font-weight: 600; margin-top: 2px; }
+  
+  /* Style Grid */
+  .style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .style-option {
+    padding: 14px; border-radius: 14px; border: 2px solid #e8e2da;
+    background: #fff; cursor: pointer; transition: all 0.2s ease;
+    position: relative; -webkit-user-select: none; user-select: none;
+  }
+  .style-option:active { transform: scale(0.97); }
+  .style-option.selected { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); }
+  .style-option .option-check { top: 8px; right: 8px; width: 18px; height: 18px; font-size: 10px; }
+  .style-option.selected .option-check { display: flex; }
+  .style-preview { width: 100%; height: 60px; border-radius: 8px; margin-bottom: 8px; }
+  .style-name { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+  .style-extra { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+  .style-badge {
+    position: absolute; top: 56px; right: 10px; background: #e8a838; color: #1a1a2e;
+    font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 3px;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  
+  /* Colour Grid */
+  .colour-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .colour-option {
+    padding: 12px; border-radius: 12px; border: 2px solid #e8e2da;
+    background: #fff; cursor: pointer; transition: all 0.2s ease;
+    text-align: center; position: relative; -webkit-user-select: none; user-select: none;
+  }
+  .colour-option:active { transform: scale(0.96); }
+  .colour-option.selected { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); }
+  .colour-option .option-check { top: 6px; right: 6px; width: 18px; height: 18px; font-size: 10px; }
+  .colour-option.selected .option-check { display: flex; }
+  .colour-swatch {
+    width: 100%; height: 48px; border-radius: 8px; margin-bottom: 8px;
+    border: 1px solid rgba(0,0,0,0.08);
+  }
+  .colour-name { font-size: 11px; font-weight: 600; color: #1a1a2e; }
+  .colour-code { font-size: 9px; color: #9ca3af; margin-top: 1px; }
+  
+  /* Height visual */
+  .height-visual {
+    display: flex; align-items: flex-end; gap: 4px; height: 44px;
+    margin-right: 16px;
+  }
+  .height-bar {
+    width: 4px; background: #e0dbd4; border-radius: 2px; transition: all 0.3s ease;
+  }
+  .option.selected .height-bar { background: #e8a838; }
+  
+  /* Width bar */
+  .width-bar { height: 6px; border-radius: 3px; background: #e8e2da; transition: all 0.3s ease; }
+  .option.selected .width-bar { background: linear-gradient(90deg, #e8a838, #f0b84d); }
+  .width-row, .height-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
+  .width-label, .height-label { font-size: 15px; font-weight: 600; color: #1a1a2e; white-space: nowrap; }
+  .height-desc { font-size: 11px; color: #9ca3af; }
+  
+  /* Job type grid */
+  .job-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .job-option {
+    padding: 20px 14px; border-radius: 14px; border: 2px solid #e8e2da;
+    background: #fff; cursor: pointer; transition: all 0.2s ease;
+    text-align: center; position: relative; -webkit-user-select: none; user-select: none;
+  }
+  .job-option:active { transform: scale(0.97); }
+  .job-option.selected { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); }
+  .job-option .option-check { top: 8px; right: 8px; width: 18px; height: 18px; font-size: 10px; }
+  .job-option.selected .option-check { display: flex; }
+  .job-icon { font-size: 28px; margin-bottom: 8px; }
+  .job-name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .job-desc { font-size: 11px; color: #9ca3af; margin-top: 3px; line-height: 1.4; }
+  
+  /* Timeframe */
+  .time-icon { font-size: 20px; margin-right: 4px; }
+  
+  /* Extras */
+  .extra-row { display: flex; align-items: center; justify-content: space-between; }
+  .extra-left { display: flex; align-items: center; gap: 12px; }
+  .extra-icon { font-size: 20px; }
+  .extra-name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .extra-price { font-size: 13px; font-weight: 600; color: #9ca3af; transition: color 0.2s; }
+  .option.selected .extra-price { color: #e8a838; }
+  
+  /* Result */
+  .result-card {
+    background: linear-gradient(135deg, #1a1a2e 0%, #2d3142 100%);
+    border-radius: 18px; padding: 28px 24px; margin-bottom: 16px;
+    text-align: center; animation: slideUp 0.5s ease both;
+  }
+  .result-label { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
+  .result-price { font-size: 36px; font-weight: 700; font-family: 'Playfair Display', serif; color: #e8a838; line-height: 1.1; }
+  .result-note { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 6px; }
+  
+  .summary-card {
+    background: #fff; border-radius: 14px; padding: 18px; border: 1px solid #e8e2da;
+    margin-bottom: 16px; animation: slideUp 0.5s ease 0.1s both;
+  }
+  .summary-title { font-size: 10px; color: #9ca3af; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
+  .summary-row {
+    display: flex; justify-content: space-between; padding: 7px 0;
+    border-bottom: 1px solid #f5f0eb; font-size: 13px;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-key { color: #9ca3af; }
+  .summary-val { color: #1a1a2e; font-weight: 600; text-align: right; max-width: 55%; }
+  
+  .cta-card {
+    background: linear-gradient(135deg, #fdf6ec, #fef9f1);
+    border-radius: 14px; padding: 22px; border: 2px solid #e8a838;
+    text-align: center; margin-bottom: 14px; animation: slideUp 0.5s ease 0.2s both;
+  }
+  .cta-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .cta-subtitle { font-size: 12px; color: #9ca3af; margin-bottom: 16px; line-height: 1.5; }
+  .cta-buttons { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  
+  /* Buttons */
+  .btn {
+    padding: 13px 24px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s ease;
+    border: none; -webkit-user-select: none; user-select: none; text-decoration: none;
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  }
+  .btn:active { transform: scale(0.97); }
+  .btn-primary { background: #e8a838; color: #1a1a2e; box-shadow: 0 4px 16px rgba(232,168,56,0.25); }
+  .btn-primary:disabled { background: #d1ccc5; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; }
+  .btn-secondary { background: transparent; color: #1a1a2e; border: 2px solid #d1ccc5; }
+  .btn-call { background: #e8a838; color: #1a1a2e; padding: 13px 20px; font-size: 15px; font-weight: 700; box-shadow: 0 4px 16px rgba(232,168,56,0.25); }
+  .btn-quote { background: transparent; color: #1a1a2e; border: 2px solid #d1ccc5; padding: 13px 20px; }
+  
+  .nav-row { display: flex; justify-content: flex-end; margin-top: 22px; gap: 10px; }
+  .nav-row.has-back { justify-content: space-between; }
+  
+  .start-over { text-align: center; font-size: 12px; color: #9ca3af; cursor: pointer; text-decoration: underline; padding: 8px; }
+  
+  .footer { text-align: center; margin-top: 20px; font-size: 11px; color: #c4beb6; line-height: 1.5; }
+  .powered-by { text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e8e2da; font-size: 10px; color: #c4beb6; }
+  .powered-by a { color: #9ca3af; text-decoration: none; font-weight: 600; }
+  
+  /* Contact form */
+  .form-row { margin-bottom: 14px; }
+  .form-label { display: block; font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
+  .form-input {
+    width: 100%; padding: 12px 14px; border-radius: 10px; border: 2px solid #e8e2da;
+    background: #fff; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #1a1a2e;
+    outline: none; transition: border-color 0.2s;
+  }
+  .form-input:focus { border-color: #e8a838; }
+  .form-input::placeholder { color: #c4beb6; }
+  .form-row-half { display: flex; gap: 10px; }
+  .form-row-half > div { flex: 1; }
+  .form-note { font-size: 11px; color: #9ca3af; margin-top: 6px; text-align: center; }
+  
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+</style>
 </head>
 <body>
-    <div class="demo-header">
-        <h1 class="demo-title">👍i Interactive Demo</h1>
-        <p class="demo-subtitle">Tap the button below to try it out</p>
-    </div>
-    
-    <!-- 👍i Widget Implementation -->
-    <div id="thumbs-widget">
-        <div id="thumbs-button" onclick="toggleThumbs()">
-            👍
-            <div id="i-indicator">i</div>
-        </div>
-        
-        <div id="reactions-popup" class="thumbs-popup">
-            <div class="popup-title">What do you think?</div>
-            
-            <div class="reaction-option" onclick="saveReaction('helpful')">
-                <span class="emoji">👍</span> This is helpful
-            </div>
-            
-            <div class="reaction-option" onclick="saveReaction('love')">
-                <span class="emoji">❤️</span> I love this
-            </div>
-            
-            <div class="reaction-option" onclick="saveReaction('amazing')">
-                <span class="emoji">🔥</span> This is amazing
-            </div>
-            
-            <div class="reaction-option" onclick="saveReaction('informative')">
-                <span class="emoji">💡</span> Very informative
-            </div>
-            
-            <div class="thumbs-close-button" onclick="closeThumbsPopups()">
-                Close
-            </div>
-        </div>
-        
-        <div id="stats-popup" class="thumbs-popup">
-            <div class="popup-title">Reaction Statistics</div>
-            <div id="stats-content">
-                <p>No reactions yet</p>
-            </div>
-            <div class="stats-buttons">
-                <button class="stats-code-button" onclick="openCodePopup()">Get Code</button>
-                <div class="thumbs-close-button" onclick="closeThumbsPopups()">Close</div>
-            </div>
-        </div>
-    </div>
-    
-    <div class="instructions">
-        <h2>How it works</h2>
-        <div class="step">
-            <span class="step-number">1</span>
-            Tap the 👍i button to open reaction options
-        </div>
-        <div class="step">
-            <span class="step-number">2</span>
-            Choose a reaction to register your feedback
-        </div>
-        <div class="step">
-            <span class="step-number">3</span>
-            View statistics and get the code to use on your site
-        </div>
-    </div>
-    
-    <!-- Code Popup -->
-    <div id="code-popup">
-        <div class="popup-content">
-            <div class="popup-header">
-                <div class="popup-title">👍i Widget Code</div>
-                <div class="close-button" onclick="closeCodePopup()">&times;</div>
-            </div>
-            
-            <div class="popup-tabs">
-                <button class="popup-tab active" onclick="switchTab('code')">Code</button>
-                <button class="popup-tab" onclick="switchTab('customize')">Customize</button>
-            </div>
-            
-            <div id="code-tab" class="tab-content active">
-                <textarea id="code-content" readonly></textarea>
-            </div>
-            
-            <div id="customize-tab" class="tab-content">
-                <div id="customize-content">
-                    <div class="customize-section">
-                        <h3>Reactions</h3>
-                        <div class="form-group emoji-input">
-                            <input type="text" id="emoji1" value="👍" maxlength="2">
-                            <input type="text" id="reaction1" class="reaction-text" value="This is helpful">
-                        </div>
-                        <div class="form-group emoji-input">
-                            <input type="text" id="emoji2" value="❤️" maxlength="2">
-                            <input type="text" id="reaction2" class="reaction-text" value="I love this">
-                        </div>
-                        <div class="form-group emoji-input">
-                            <input type="text" id="emoji3" value="🔥" maxlength="2">
-                            <input type="text" id="reaction3" class="reaction-text" value="This is amazing">
-                        </div>
-                        <div class="form-group emoji-input">
-                            <input type="text" id="emoji4" value="💡" maxlength="2">
-                            <input type="text" id="reaction4" class="reaction-text" value="Very informative">
-                        </div>
-                    </div>
-                    
-                    <div class="customize-section">
-                        <h3>Appearance</h3>
-                        <div class="form-group">
-                            <label for="primary-color">Primary Color</label>
-                            <input type="color" id="primary-color" value="#4361ee">
-                        </div>
-                        <div class="form-group">
-                            <label for="button-position">Position</label>
-                            <select id="button-position">
-                                <option value="bottom-right">Bottom Right</option>
-                                <option value="bottom-left">Bottom Left</option>
-                                <option value="top-right">Top Right</option>
-                                <option value="top-left">Top Left</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="customize-section">
-                        <h3>Text</h3>
-                        <div class="form-group">
-                            <label for="popup-heading">Reactions Popup Heading</label>
-                            <input type="text" id="popup-heading" value="What do you think?">
-                        </div>
-                        <div class="form-group">
-                            <label for="stats-heading">Stats Popup Heading</label>
-                            <input type="text" id="stats-heading" value="Reaction Statistics">
-                        </div>
-                        <div class="form-group">
-                            <label for="button-text">Main Button Emoji</label>
-                            <input type="text" id="button-text" value="👍" maxlength="2" style="font-size: 20px; text-align: center;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="popup-footer">
-                <span id="success-message" class="success-message">Code copied!</span>
-                <div class="footer-buttons">
-                    <button id="update-button" class="update-button" onclick="updateCustomizations()">Update Code</button>
-                    <button class="copy-button" onclick="copyCode()">Copy Code</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div id="toast" class="toast"></div>
-    // Add this script tag to the end of the HTML body
-<script>
-    // 👍i Widget Functionality
-    var reactions = {
-        helpful: 0,
-        love: 0,
-        amazing: 0,
-        informative: 0
-    };
 
-    // Try to load saved data
-    try {
-        var savedReactions = localStorage.getItem('thumbs-widget-reactions');
-        if (savedReactions) {
-            reactions = JSON.parse(savedReactions);
-        }
-    } catch(e) {
-        console.log('Could not load saved reactions');
-    }
-
-    // Toggle reactions popup
-    function toggleThumbs() {
-        closeThumbsPopups();
-        document.getElementById('reactions-popup').style.display = 'block';
-    }
-
-    // Save reaction and show stats
-    function saveReaction(type) {
-        // Increment the selected reaction type
-        reactions[type]++;
-        
-        // Save to localStorage
-        try {
-            localStorage.setItem('thumbs-widget-reactions', JSON.stringify(reactions));
-        } catch(e) {
-            console.log('Could not save reaction');
-        }
-        
-        showToast("Thank you for your feedback!");
-        closeThumbsPopups();
-        updateStats();
-        document.getElementById('stats-popup').style.display = 'block';
-    }
-
-    // Close all popups
-    function closeThumbsPopups() {
-        document.getElementById('reactions-popup').style.display = 'none';
-        document.getElementById('stats-popup').style.display = 'none';
-    }
-
-    // Update statistics display
-    function updateStats() {
-        var total = reactions.helpful + reactions.love + reactions.amazing + reactions.informative;
-        var statsContent = document.getElementById('stats-content');
-        
-        if (total === 0) {
-            statsContent.innerHTML = '<p>No reactions yet</p>';
-            return;
-        }
-        
-        var helpfulPercent = Math.round((reactions.helpful / total) * 100) || 0;
-        var lovePercent = Math.round((reactions.love / total) * 100) || 0;
-        var amazingPercent = Math.round((reactions.amazing / total) * 100) || 0;
-        var informativePercent = Math.round((reactions.informative / total) * 100) || 0;
-        
-        var html = '<p><strong>Total reactions:</strong> ' + total + '</p>';
-        
-        html += '<div class="stats-item">';
-        html += '<div>👍 This is helpful: ' + reactions.helpful + ' (' + helpfulPercent + '%)</div>';
-        html += '<div class="progress-bar"><div class="progress" style="width:' + helpfulPercent + '%"></div></div>';
-        html += '</div>';
-        
-        html += '<div class="stats-item">';
-        html += '<div>❤️ I love this: ' + reactions.love + ' (' + lovePercent + '%)</div>';
-        html += '<div class="progress-bar"><div class="progress" style="width:' + lovePercent + '%"></div></div>';
-        html += '</div>';
-        
-        html += '<div class="stats-item">';
-        html += '<div>🔥 This is amazing: ' + reactions.amazing + ' (' + amazingPercent + '%)</div>';
-        html += '<div class="progress-bar"><div class="progress" style="width:' + amazingPercent + '%"></div></div>';
-        html += '</div>';
-        
-        html += '<div class="stats-item">';
-        html += '<div>💡 Very informative: ' + reactions.informative + ' (' + informativePercent + '%)</div>';
-        html += '<div class="progress-bar"><div class="progress" style="width:' + informativePercent + '%"></div></div>';
-        html += '</div>';
-        
-        statsContent.innerHTML = html;
-        
-        // Animate progress bars
-        setTimeout(function() {
-            var bars = document.querySelectorAll('.progress');
-            bars.forEach(function(bar) {
-                var width = bar.style.width;
-                bar.style.width = '0%';
-                setTimeout(function() {
-                    bar.style.width = width;
-                }, 50);
-            });
-        }, 50);
-    }
-
-    // Display toast message
-    function showToast(message) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.style.display = 'block';
-        
-        setTimeout(function() {
-            toast.style.display = 'none';
-        }, 2000);
-    }
-
-    // Open code popup
-    function openCodePopup() {
-        document.getElementById('code-popup').style.display = 'flex';
-        generateCode();
-    }
-    
-    // Close code popup
-    function closeCodePopup() {
-        document.getElementById('code-popup').style.display = 'none';
-    }
-    
-    // Switch between code and customize tabs
-    function switchTab(tabName) {
-        const tabs = document.querySelectorAll('.popup-tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        tabs.forEach(tab => tab.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-        
-        document.querySelector(`.popup-tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
-        document.getElementById(`${tabName}-tab`).classList.add('active');
-    }
-    
-    // Update code based on customizations
-    function updateCustomizations() {
-        generateCode();
-        showToast("Code updated with your customizations!");
-        switchTab('code');
-    }
-    
-    // Copy code to clipboard
-    function copyCode() {
-        const codeContent = document.getElementById('code-content');
-        codeContent.select();
-        document.execCommand('copy');
-        
-        const successMessage = document.getElementById('success-message');
-        successMessage.style.display = 'inline-block';
-        
-        setTimeout(function() {
-            successMessage.style.display = 'none';
-        }, 2000);
-    }
-    
-    // Generate customized code
-    function generateCode() {
-        // Get customization values
-        const emoji1 = document.getElementById('emoji1').value || '👍';
-        const emoji2 = document.getElementById('emoji2').value || '❤️';
-        const emoji3 = document.getElementById('emoji3').value || '🔥';
-        const emoji4 = document.getElementById('emoji4').value || '💡';
-        
-        const reaction1 = document.getElementById('reaction1').value || 'This is helpful';
-        const reaction2 = document.getElementById('reaction2').value || 'I love this';
-        const reaction3 = document.getElementById('reaction3').value || 'This is amazing';
-        const reaction4 = document.getElementById('reaction4').value || 'Very informative';
-        
-        const primaryColor = document.getElementById('primary-color').value || '#4361ee';
-        const position = document.getElementById('button-position').value || 'bottom-right';
-        
-        const popupHeading = document.getElementById('popup-heading').value || 'What do you think?';
-        const statsHeading = document.getElementById('stats-heading').value || 'Reaction Statistics';
-        const buttonText = document.getElementById('button-text').value || '👍';
-        
-        // Generate position CSS
-        let positionCSS = 'bottom: 20px; right: 20px;';
-        if (position === 'bottom-left') positionCSS = 'bottom: 20px; left: 20px;';
-        if (position === 'top-right') positionCSS = 'top: 20px; right: 20px;';
-        if (position === 'top-left') positionCSS = 'top: 20px; left: 20px;';
-        
-        // Generate code with customizations
-        const customCode = `<!-- 👍i Widget with Reactions and Stats -->
-<style>
-#thumbs-widget {
-    position: fixed;
-    ${positionCSS}
-    z-index: 9999;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-}
-
-#thumbs-button {
-    width: 70px;
-    height: 70px;
-    background: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 36px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    cursor: pointer;
-    position: relative;
-}
-
-#i-indicator {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 28px;
-    height: 28px;
-    background: ${primaryColor};
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-style: italic;
-    font-weight: bold;
-}
-
-.thumbs-popup {
-    position: absolute;
-    ${position.includes('top') ? 'top: 80px;' : 'bottom: 80px;'}
-    ${position.includes('left') ? 'left: 0;' : 'right: 0;'}
-    background: white;
-    width: 320px;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-    display: none;
-}
-
-.popup-title {
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 18px;
-}
-
-.reaction-option {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    margin-bottom: 12px;
-    background: #f8f9fa;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.reaction-option:hover {
-    background: #e9ecef;
-    transform: translateY(-2px);
-    transition: all 0.2s ease;
-}
-
-.emoji {
-    font-size: 28px;
-    margin-right: 15px;
-}
-
-.thumbs-close-button {
-    color: ${primaryColor};
-    text-align: center;
-    cursor: pointer;
-    margin-top: 15px;
-    font-size: 16px;
-}
-
-.stats-item {
-    margin: 15px 0;
-    font-size: 16px;
-}
-
-.progress-bar {
-    height: 10px;
-    background: #e9ecef;
-    border-radius: 5px;
-    margin-top: 8px;
-    overflow: hidden;
-}
-
-.progress {
-    height: 100%;
-    background: ${primaryColor};
-    width: 0%;
-    transition: width 0.5s ease-out;
-}
-
-.stats-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.stats-code-button {
-    background: ${primaryColor};
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-/* Mobile Optimization */
-@media (max-width: 480px) {
-    .thumbs-popup {
-        width: 280px;
-    }
-    
-    .reaction-option {
-        padding: 10px 14px;
-    }
-    
-    .emoji {
-        font-size: 24px;
-    }
-}
-</style>
-
-<div id="thumbs-widget">
-    <div id="thumbs-button" onclick="toggleThumbs()">
-        ${buttonText}
-        <div id="i-indicator">i</div>
-    </div>
-    
-    <div id="reactions-popup" class="thumbs-popup">
-        <div class="popup-title">${popupHeading}</div>
-        
-        <div class="reaction-option" onclick="saveReaction('reaction1')">
-            <span class="emoji">${emoji1}</span> ${reaction1}
-        </div>
-        
-        <div class="reaction-option" onclick="saveReaction('reaction2')">
-            <span class="emoji">${emoji2}</span> ${reaction2}
-        </div>
-        
-        <div class="reaction-option" onclick="saveReaction('reaction3')">
-            <span class="emoji">${emoji3}</span> ${reaction3}
-        </div>
-        
-        <div class="reaction-option" onclick="saveReaction('reaction4')">
-            <span class="emoji">${emoji4}</span> ${reaction4}
-        </div>
-        
-        <div class="thumbs-close-button" onclick="closeThumbsPopups()">
-            Close
-        </div>
-    </div>
-    
-    <div id="stats-popup" class="thumbs-popup">
-        <div class="popup-title">${statsHeading}</div>
-        <div id="stats-content">
-            <p>No reactions yet</p>
-        </div>
-        <div class="stats-buttons">
-            <button class="stats-code-button" onclick="openCodePopup()">Get Code</button>
-            <div class="thumbs-close-button" onclick="closeThumbsPopups()">Close</div>
-        </div>
-    </div>
+<div class="container">
+  <div class="header">
+    <div class="header-brand">Gateworld Perth</div>
+    <div class="header-title">Instant Gate Estimator</div>
+    <div class="header-line"></div>
+    <div class="header-rating"><span>★★★★★</span> 5.0 from 48 Google Reviews</div>
+  </div>
+  
+  <div class="card" id="mainCard">
+    <div class="steps" id="stepsIndicator"></div>
+    <div id="content"></div>
+    <div id="nav"></div>
+  </div>
+  
+  <div class="footer">Automatic sliding gates & swinging gates specialists<br>Serving all of Perth Metro</div>
+  <div class="powered-by">Powered by <a href="https://itabs.ai" target="_blank">iTabs</a></div>
 </div>
 
 <script>
-// Widget data
-var reactions = {
-    reaction1: 0,
-    reaction2: 0,
-    reaction3: 0,
-    reaction4: 0
+// ─── DATA ───
+const GATE_TYPES = [
+  { id: 'sliding', name: 'Sliding Gate', icon: '⟶', desc: 'Automatic sliding driveway gates', basePrice: 3800, bg: 'linear-gradient(135deg, #2d3436 0%, #636e72 100%)' },
+  { id: 'swing_single', name: 'Single Swing Gate', icon: '⟳', desc: 'One panel, swings open', basePrice: 3200, bg: 'linear-gradient(135deg, #2d3436 0%, #4a6741 100%)' },
+  { id: 'swing_double', name: 'Double Swing Gate', icon: '⟳⟳', desc: 'Two panels, both swing open', basePrice: 4200, bg: 'linear-gradient(135deg, #2d3436 0%, #3a5a4a 100%)' },
+  { id: 'pedestrian', name: 'Pedestrian Gate', icon: '🚶', desc: 'Walk-through access gate', basePrice: 1200, bg: 'linear-gradient(135deg, #2d3436 0%, #5a4a3a 100%)' },
+];
+
+const STYLES = [
+  { id: 'slat', name: 'Aluminium Slat', priceAdd: 0, popular: true, bg: 'repeating-linear-gradient(0deg, #3d3d3d 0px, #3d3d3d 8px, #5a5a5a 8px, #5a5a5a 12px)' },
+  { id: 'picket', name: 'Picket', priceAdd: 200, popular: false, bg: 'repeating-linear-gradient(90deg, #4a4a4a 0px, #4a4a4a 6px, transparent 6px, transparent 14px)' },
+  { id: 'batten', name: 'Batten', priceAdd: 300, popular: false, bg: 'repeating-linear-gradient(90deg, #555 0px, #555 12px, #3a3a3a 12px, #3a3a3a 14px)' },
+  { id: 'blade', name: 'Vertical Blade', priceAdd: 400, popular: false, bg: 'repeating-linear-gradient(90deg, #4a4a4a 0px, #4a4a4a 3px, transparent 3px, transparent 18px)' },
+];
+
+const COLOURS = [
+  { id: 'monument', name: 'Monument', hex: '#3b3b3b', code: 'Colorbond' },
+  { id: 'surfmist', name: 'Surfmist', hex: '#e8e4dc', code: 'Colorbond' },
+  { id: 'woodland', name: 'Woodland Grey', hex: '#5c5c50', code: 'Colorbond' },
+  { id: 'satin_black', name: 'Satin Black', hex: '#1a1a1a', code: 'Powder Coat' },
+  { id: 'primrose', name: 'Primrose', hex: '#f0e8c8', code: 'Colorbond' },
+  { id: 'basalt', name: 'Basalt', hex: '#6b6b60', code: 'Colorbond' },
+  { id: 'pale_eucalypt', name: 'Pale Eucalypt', hex: '#6b7c5e', code: 'Colorbond' },
+  { id: 'ironstone', name: 'Ironstone', hex: '#44403c', code: 'Colorbond' },
+  { id: 'custom', name: 'Custom RAL', hex: 'linear-gradient(135deg, #e8a838, #e86838, #6838e8, #38a8e8)', code: '+$200', isGradient: true },
+];
+
+const HEIGHTS = [
+  { id: '1200', label: '1200mm', desc: 'Standard low fence', multiplier: 0.9, barH: [16, 20, 24] },
+  { id: '1500', label: '1500mm', desc: 'Most popular for front yards', multiplier: 1.0, barH: [20, 26, 32], popular: true },
+  { id: '1800', label: '1800mm', desc: 'Full privacy height', multiplier: 1.15, barH: [26, 34, 42] },
+  { id: '2100', label: '2100mm', desc: 'Maximum height', multiplier: 1.35, barH: [30, 38, 44] },
+];
+
+const WIDTHS = [
+  { id: '3m', label: 'Up to 3m', multiplier: 1.0, barWidth: '30%' },
+  { id: '4m', label: '3m – 4m', multiplier: 1.15, barWidth: '50%' },
+  { id: '5m', label: '4m – 5m', multiplier: 1.3, barWidth: '70%' },
+  { id: '6m', label: '5m – 6m+', multiplier: 1.5, barWidth: '90%' },
+];
+
+const JOB_TYPES = [
+  { id: 'new', name: 'Brand New Install', icon: '🏗️', desc: 'No existing gate or tracks' },
+  { id: 'replace_gate', name: 'Replace Gate', icon: '🔄', desc: 'New gate on existing tracks/posts' },
+  { id: 'replace_motor', name: 'Replace Motor Only', icon: '⚡', desc: 'Keep gate, new motor', priceOverride: 1200 },
+  { id: 'add_motor', name: 'Automate Existing Gate', icon: '🤖', desc: 'Add motor to manual gate', priceOverride: 1400 },
+];
+
+const PROPERTY_TYPES = [
+  { id: 'residential', name: 'Residential', icon: '🏠', desc: 'House or townhouse' },
+  { id: 'commercial', name: 'Commercial', icon: '🏢', desc: 'Business, warehouse, industrial' },
+  { id: 'strata', name: 'Strata / Body Corp', icon: '🏘️', desc: 'Shared property or complex' },
+];
+
+const TIMEFRAMES = [
+  { id: 'asap', name: 'ASAP', icon: '🔥', desc: 'Within 2 weeks' },
+  { id: 'month', name: 'This Month', icon: '📅', desc: 'Within 4 weeks' },
+  { id: 'planning', name: 'Just Planning', icon: '💭', desc: 'Next few months' },
+  { id: 'quoting', name: 'Getting Quotes', icon: '📝', desc: 'Comparing options' },
+];
+
+const EXTRAS = [
+  { id: 'motor', name: 'Gate Motor', price: 800, icon: '⚡' },
+  { id: 'intercom', name: 'Intercom System', price: 600, icon: '📞' },
+  { id: 'keypad', name: 'Keypad Access', price: 350, icon: '🔢' },
+  { id: 'remote', name: 'Extra Remotes (×2)', price: 120, icon: '📡' },
+  { id: 'safety_beam', name: 'Safety Beam Sensors', price: 250, icon: '🔴' },
+  { id: 'ped_gate', name: 'Matching Pedestrian Gate', price: 1200, icon: '🚶' },
+];
+
+const SLOPE_OPTIONS = [
+  { id: 'flat', name: 'Flat Driveway', icon: '➖', desc: 'Level ground', priceAdd: 0 },
+  { id: 'slight', name: 'Slight Slope', icon: '⟋', desc: 'Gentle incline', priceAdd: 300 },
+  { id: 'steep', name: 'Steep Slope', icon: '⟋⟋', desc: 'Noticeable hill', priceAdd: 600 },
+  { id: 'unsure', name: 'Not Sure', icon: '❓', desc: "We'll check on site", priceAdd: 0 },
+];
+
+// Total steps: 0=gate, 1=style, 2=colour, 3=height, 4=width, 5=slope, 6=job type, 7=property, 8=timeframe, 9=extras, 10=contact, 11=result
+const TOTAL_SELECTION_STEPS = 10;
+
+// ─── STATE ───
+let state = {
+  step: 0,
+  gateType: null,
+  style: null,
+  colour: null,
+  height: null,
+  width: null,
+  slope: null,
+  jobType: null,
+  propertyType: null,
+  timeframe: null,
+  extras: [],
+  contact: { name: '', phone: '', email: '', suburb: '' },
 };
 
-// Reaction labels for display
-var reactionLabels = {
-    reaction1: "${emoji1} ${reaction1}",
-    reaction2: "${emoji2} ${reaction2}",
-    reaction3: "${emoji3} ${reaction3}",
-    reaction4: "${emoji4} ${reaction4}"
-};
-
-// Try to load saved data
-try {
-    var savedReactions = localStorage.getItem('thumbs-widget-reactions');
-    if (savedReactions) {
-        reactions = JSON.parse(savedReactions);
+// ─── RENDER ENGINE ───
+function render() {
+  const content = document.getElementById('content');
+  const nav = document.getElementById('nav');
+  const steps = document.getElementById('stepsIndicator');
+  
+  // Steps indicator
+  if (state.step <= TOTAL_SELECTION_STEPS) {
+    let html = '';
+    for (let i = 0; i < TOTAL_SELECTION_STEPS; i++) {
+      let cls = 'step-dot';
+      if (i < state.step) cls += ' done';
+      if (i === state.step) cls += ' active';
+      html += `<div class="${cls}"></div>`;
     }
-} catch(e) {
-    console.log('Could not load saved reactions');
+    html += `<span class="step-label">${state.step + 1}/${TOTAL_SELECTION_STEPS}</span>`;
+    steps.innerHTML = html;
+    steps.style.display = 'flex';
+  } else {
+    steps.style.display = 'none';
+  }
+  
+  const renderers = [
+    renderGateType, renderStyle, renderColour, renderHeight, renderWidth,
+    renderSlope, renderJobType, renderPropertyType, renderTimeframe,
+    renderExtras, renderContact, renderResult
+  ];
+  renderers[state.step](content);
+  
+  // Nav
+  if (state.step < 11) {
+    const canProceed = getCanProceed();
+    const hasBack = state.step > 0;
+    const label = state.step === 10 ? 'See My Estimate →' : state.step === 9 ? 'Continue →' : 'Continue →';
+    nav.innerHTML = `
+      <div class="nav-row ${hasBack ? 'has-back' : ''}">
+        ${hasBack ? `<button class="btn btn-secondary" onclick="goBack()">← Back</button>` : ''}
+        <button class="btn btn-primary" onclick="goNext()" ${!canProceed ? 'disabled' : ''}>${label}</button>
+      </div>
+    `;
+  } else {
+    nav.innerHTML = '';
+  }
 }
 
-// Toggle reactions popup
-function toggleThumbs() {
-    closeThumbsPopups();
-    document.getElementById('reactions-popup').style.display = 'block';
+function getCanProceed() {
+  switch (state.step) {
+    case 0: return !!state.gateType;
+    case 1: return !!state.style;
+    case 2: return !!state.colour;
+    case 3: return !!state.height;
+    case 4: return !!state.width;
+    case 5: return !!state.slope;
+    case 6: return !!state.jobType;
+    case 7: return !!state.propertyType;
+    case 8: return !!state.timeframe;
+    case 9: return true; // extras optional
+    case 10: return state.contact.name && state.contact.phone;
+    default: return false;
+  }
 }
 
-// Save reaction and show stats
-function saveReaction(type) {
-    // Increment the selected reaction type
-    reactions[type]++;
-    
-    // Save to localStorage
-    try {
-        localStorage.setItem('thumbs-widget-reactions', JSON.stringify(reactions));
-    } catch(e) {
-        console.log('Could not save reaction');
-    }
-    
-    closeThumbsPopups();
-    updateStats();
-    document.getElementById('stats-popup').style.display = 'block';
+// ─── STEP RENDERERS ───
+
+function renderGateType(el) {
+  let html = `<div class="section-title">What type of gate?</div>
+    <div class="section-subtitle">Select the gate style for your property.</div>`;
+  GATE_TYPES.forEach(g => {
+    html += `<div class="option ${state.gateType === g.id ? 'selected' : ''}" onclick="select('gateType','${g.id}')">
+      <div class="option-check">✓</div>
+      <div class="option-row">
+        <div class="option-icon" style="background: ${g.bg}">${g.icon}</div>
+        <div><div class="option-name">${g.name}</div><div class="option-desc">${g.desc}</div>
+        <div class="option-price">From $${g.basePrice.toLocaleString()}</div></div>
+      </div></div>`;
+  });
+  el.innerHTML = html;
 }
 
-// Close all popups
-function closeThumbsPopups() {
-    document.getElementById('reactions-popup').style.display = 'none';
-    document.getElementById('stats-popup').style.display = 'none';
+function renderStyle(el) {
+  let html = `<div class="section-title">Choose your style</div>
+    <div class="section-subtitle">All available in a range of powder coat colours.</div><div class="style-grid">`;
+  STYLES.forEach(s => {
+    html += `<div class="style-option ${state.style === s.id ? 'selected' : ''}" onclick="select('style','${s.id}')">
+      <div class="option-check">✓</div>
+      <div class="style-preview" style="background: ${s.bg}"></div>
+      ${s.popular ? '<div class="style-badge">Popular</div>' : ''}
+      <div class="style-name">${s.name}</div>
+      <div class="style-extra">${s.priceAdd > 0 ? '+$' + s.priceAdd : 'Base price'}</div></div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
 }
 
-// Update statistics display
-function updateStats() {
-    var total = reactions.reaction1 + reactions.reaction2 + reactions.reaction3 + reactions.reaction4;
-    var statsContent = document.getElementById('stats-content');
-    
-    if (total === 0) {
-        statsContent.innerHTML = '<p>No reactions yet</p>';
-        return;
-    }
-    
-    var reaction1Percent = Math.round((reactions.reaction1 / total) * 100) || 0;
-    var reaction2Percent = Math.round((reactions.reaction2 / total) * 100) || 0;
-    var reaction3Percent = Math.round((reactions.reaction3 / total) * 100) || 0;
-    var reaction4Percent = Math.round((reactions.reaction4 / total) * 100) || 0;
-    
-    var html = '<p><strong>Total reactions:</strong> ' + total + '</p>';
-    
-    html += '<div class="stats-item">';
-    html += '<div>' + reactionLabels.reaction1 + ': ' + reactions.reaction1 + ' (' + reaction1Percent + '%)</div>';
-    html += '<div class="progress-bar"><div class="progress" style="width:' + reaction1Percent + '%"></div></div>';
-    html += '</div>';
-    
-    html += '<div class="stats-item">';
-    html += '<div>' + reactionLabels.reaction2 + ': ' + reactions.reaction2 + ' (' + reaction2Percent + '%)</div>';
-    html += '<div class="progress-bar"><div class="progress" style="width:' + reaction2Percent + '%"></div></div>';
-    html += '</div>';
-    
-    html += '<div class="stats-item">';
-    html += '<div>' + reactionLabels.reaction3 + ': ' + reactions.reaction3 + ' (' + reaction3Percent + '%)</div>';
-    html += '<div class="progress-bar"><div class="progress" style="width:' + reaction3Percent + '%"></div></div>';
-    html += '</div>';
-    
-    html += '<div class="stats-item">';
-    html += '<div>' + reactionLabels.reaction4 + ': ' + reactions.reaction4 + ' (' + reaction4Percent + '%)</div>';
-    html += '<div class="progress-bar"><div class="progress" style="width:' + reaction4Percent + '%"></div></div>';
-    html += '</div>';
-    
-    statsContent.innerHTML = html;
+function renderColour(el) {
+  let html = `<div class="section-title">Pick your colour</div>
+    <div class="section-subtitle">Standard Colorbond & powder coat colours.</div><div class="colour-grid">`;
+  COLOURS.forEach(c => {
+    const bg = c.isGradient ? c.hex : c.hex;
+    html += `<div class="colour-option ${state.colour === c.id ? 'selected' : ''}" onclick="select('colour','${c.id}')">
+      <div class="option-check">✓</div>
+      <div class="colour-swatch" style="background: ${bg}"></div>
+      <div class="colour-name">${c.name}</div>
+      <div class="colour-code">${c.code}</div></div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
 }
-<\/script>`;
 
-<br>
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>👍i Mobile Demo</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            background-color: #f8f9fa;
-            color: #333;
-            line-height: 1.6;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-            touch-action: manipulation;
-            -webkit-tap-highlight-color: transparent;
-        }
-        
-        .demo-header {
-            text-align: center;
-            margin-bottom: 40px;
-        }
-        
-        .demo-title {
-            font-size: 28px;
-            font-weight: 700;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        
-        .demo-subtitle {
-            font-size: 16px;
-            color: #666;
-        }
+function renderHeight(el) {
+  let html = `<div class="section-title">What height?</div>
+    <div class="section-subtitle">Measured from ground to top of gate.</div>`;
+  HEIGHTS.forEach(h => {
+    html += `<div class="option ${state.height === h.id ? 'selected' : ''}" onclick="select('height','${h.id}')">
+      <div class="option-check">✓</div>
+      <div class="height-row">
+        <div style="display:flex;align-items:center;gap:14px">
+          <div class="height-visual">${h.barH.map(b => `<div class="height-bar" style="height:${b}px"></div>`).join('')}</div>
+          <div><div class="height-label">${h.label}${h.popular ? ' <span style="color:#e8a838;font-size:11px">★ Popular</span>' : ''}</div>
+          <div class="height-desc">${h.desc}</div></div>
+        </div>
+      </div></div>`;
+  });
+  el.innerHTML = html;
+}
 
-        /* 👍i Widget Styles */
-        #thumbs-widget {
-            position: relative;
-            z-index: 1000;
-            margin: 20px auto;
-            width: 90%;
-            max-width: 400px;
-        }
+function renderWidth(el) {
+  let html = `<div class="section-title">Opening width?</div>
+    <div class="section-subtitle">Measure your driveway or gate opening.</div>`;
+  WIDTHS.forEach(w => {
+    html += `<div class="option ${state.width === w.id ? 'selected' : ''}" onclick="select('width','${w.id}')">
+      <div class="option-check">✓</div>
+      <div class="width-row"><div class="width-label">${w.label}</div>
+      <div class="width-bar" style="width:${w.barWidth};flex-shrink:0"></div></div></div>`;
+  });
+  el.innerHTML = html;
+}
 
-        #thumbs-button {
-            width: 80px;
-            height: 80px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 40px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
-            cursor: pointer;
-            position: relative;
-            user-select: none;
-            transition: transform 0.2s;
-        }
-        
-        #thumbs-button:active {
-            transform: scale(0.95);
-        }
+function renderSlope(el) {
+  let html = `<div class="section-title">Is your driveway sloped?</div>
+    <div class="section-subtitle">Slopes can affect gate type and installation.</div>`;
+  SLOPE_OPTIONS.forEach(s => {
+    html += `<div class="option ${state.slope === s.id ? 'selected' : ''}" onclick="select('slope','${s.id}')">
+      <div class="option-check">✓</div>
+      <div class="option-row">
+        <div class="option-icon" style="background:#f0ebe4;font-size:20px">${s.icon}</div>
+        <div><div class="option-name">${s.name}</div><div class="option-desc">${s.desc}</div>
+        ${s.priceAdd > 0 ? `<div class="option-price">+$${s.priceAdd}</div>` : ''}</div>
+      </div></div>`;
+  });
+  el.innerHTML = html;
+}
 
-        #i-indicator {
-            position: absolute;
-            top: 0;
-            right: 0;
-            width: 32px;
-            height: 32px;
-            background: #4361ee;
-            color: white;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-style: italic;
-            font-weight: bold;
-        }
+function renderJobType(el) {
+  let html = `<div class="section-title">New or replacement?</div>
+    <div class="section-subtitle">This helps us give you a more accurate estimate.</div><div class="job-grid">`;
+  JOB_TYPES.forEach(j => {
+    html += `<div class="job-option ${state.jobType === j.id ? 'selected' : ''}" onclick="select('jobType','${j.id}')">
+      <div class="option-check">✓</div>
+      <div class="job-icon">${j.icon}</div>
+      <div class="job-name">${j.name}</div>
+      <div class="job-desc">${j.desc}</div></div>`;
+  });
+  html += '</div>';
+  el.innerHTML = html;
+}
 
-        .thumbs-popup {
-            position: absolute;
-            left: 0;
-            right: 0;
-            margin: 20px auto;
-            background: white;
-            width: 100%;
-            padding: 25px;
-            border-radius: 16px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-            display: none;
-        }
+function renderPropertyType(el) {
+  let html = `<div class="section-title">Property type?</div>
+    <div class="section-subtitle">Helps us plan for access and any approvals needed.</div>`;
+  PROPERTY_TYPES.forEach(p => {
+    html += `<div class="option ${state.propertyType === p.id ? 'selected' : ''}" onclick="select('propertyType','${p.id}')">
+      <div class="option-check">✓</div>
+      <div class="option-row">
+        <div class="option-icon" style="background:#f0ebe4;font-size:22px">${p.icon}</div>
+        <div><div class="option-name">${p.name}</div><div class="option-desc">${p.desc}</div></div>
+      </div></div>`;
+  });
+  el.innerHTML = html;
+}
 
-        .popup-title {
-            font-weight: bold;
-            margin-bottom: 25px;
-            color: #333;
-            font-size: 20px;
-            text-align: center;
-        }
+function renderTimeframe(el) {
+  let html = `<div class="section-title">When do you need it?</div>
+    <div class="section-subtitle">No rush — just helps Daryl plan his schedule.</div>`;
+  TIMEFRAMES.forEach(t => {
+    html += `<div class="option ${state.timeframe === t.id ? 'selected' : ''}" onclick="select('timeframe','${t.id}')">
+      <div class="option-check">✓</div>
+      <div class="option-row">
+        <div class="option-icon" style="background:#f0ebe4;font-size:22px">${t.icon}</div>
+        <div><div class="option-name">${t.name}</div><div class="option-desc">${t.desc}</div></div>
+      </div></div>`;
+  });
+  el.innerHTML = html;
+}
 
-        .reaction-option {
-            display: flex;
-            align-items: center;
-            padding: 16px;
-            margin-bottom: 15px;
-            background: #f8f9fa;
-            border: 1px solid #eee;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 18px;
-            position: relative;
-            overflow: hidden;
-        }
+function renderExtras(el) {
+  let html = `<div class="section-title">Any extras?</div>
+    <div class="section-subtitle">Optional add-ons. Skip if you're not sure.</div>`;
+  
+  // Filter out motor if job type is replace_motor or add_motor
+  // Filter out ped gate if selecting pedestrian gate
+  const filtered = EXTRAS.filter(e => {
+    if ((state.jobType === 'replace_motor' || state.jobType === 'add_motor') && e.id === 'motor') return false;
+    if (state.gateType === 'pedestrian' && e.id === 'ped_gate') return false;
+    return true;
+  });
+  
+  filtered.forEach(e => {
+    const sel = state.extras.includes(e.id);
+    html += `<div class="option ${sel ? 'selected' : ''}" onclick="toggleExtra('${e.id}')">
+      <div class="option-check">✓</div>
+      <div class="extra-row"><div class="extra-left">
+        <span class="extra-icon">${e.icon}</span><span class="extra-name">${e.name}</span></div>
+        <span class="extra-price">+$${e.price}</span></div></div>`;
+  });
+  el.innerHTML = html;
+}
 
-        .reaction-option:active {
-            background: #e9ecef;
-        }
+function renderContact(el) {
+  el.innerHTML = `
+    <div class="section-title">Almost there!</div>
+    <div class="section-subtitle">Your details so Daryl can get back to you with an exact quote.</div>
+    <div class="form-row">
+      <label class="form-label">Your Name <span style="color:#e8a838">*</span></label>
+      <input class="form-input" type="text" placeholder="e.g. John Smith" value="${state.contact.name}" oninput="updateContact('name', this.value)">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Phone <span style="color:#e8a838">*</span></label>
+      <input class="form-input" type="tel" placeholder="e.g. 0412 345 678" value="${state.contact.phone}" oninput="updateContact('phone', this.value)">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Email</label>
+      <input class="form-input" type="email" placeholder="e.g. john@email.com" value="${state.contact.email}" oninput="updateContact('email', this.value)">
+    </div>
+    <div class="form-row">
+      <label class="form-label">Suburb</label>
+      <input class="form-input" type="text" placeholder="e.g. Scarborough" value="${state.contact.suburb}" oninput="updateContact('suburb', this.value)">
+    </div>
+    <div class="form-note">Your info goes directly to Daryl at Gateworld. No spam, no third parties.</div>
+  `;
+}
 
-        .emoji {
-            font-size: 30px;
-            margin-right: 15px;
-        }
-
-        .thumbs-close-button {
-            color: #4361ee;
-            text-align: center;
-            cursor: pointer;
-            margin-top: 20px;
-            font-size: 18px;
-            padding: 10px;
-            font-weight: 600;
-        }
-
-        .stats-item {
-            margin: 20px 0;
-            font-size: 16px;
-        }
-
-        .progress-bar {
-            height: 12px;
-            background: #e9ecef;
-            border-radius: 6px;
-            margin-top: 8px;
-            overflow: hidden;
-        }
-
-        .progress {
-            height: 100%;
-            background: #4361ee;
-            width: 0%;
-            transition: width 0.5s ease-out;
-        }
-        
-        .stats-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 25px;
-            flex-wrap: wrap;
-        }
-        
-        .stats-code-button {
-            background: #4361ee;
-            color: white;
-            border: none;
-            padding: 14px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-            flex: 1;
-            margin-right: 10px;
-        }
-        
-        /* Code Popup */
-        #code-popup {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.8);
-            z-index: 2000;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        
-        .popup-content {
-            background: white;
-            width: 90%;
-            max-width: 90%;
-            height: 90%;
-            max-height: 90%;
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .popup-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 20px;
-            background: #f8f9fa;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .popup-title {
-            font-weight: bold;
-            font-size: 18px;
-            text-align: left;
-            margin-bottom: 0;
-        }
-        
-        .close-button {
-            font-size: 28px;
-            line-height: 1;
-            cursor: pointer;
-            color: #666;
-            padding: 5px;
-        }
-        
-        .popup-tabs {
-            display: flex;
-            background: #f0f2f5;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .popup-tab {
-            flex: 1;
-            padding: 12px;
-            text-align: center;
-            background: none;
-            border: none;
-            font-size: 16px;
-            font-weight: 600;
-            color: #666;
-            cursor: pointer;
-        }
-        
-        .popup-tab.active {
-            background: white;
-            color: #4361ee;
-            border-bottom: 3px solid #4361ee;
-        }
-        
-        .tab-content {
-            display: none;
-            flex-grow: 1;
-            overflow-y: auto;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        #code-tab {
-            height: 100%;
-        }
-        
-        #code-content {
-            width: 100%;
-            height: 100%;
-            border: none;
-            resize: none;
-            padding: 20px;
-            font-family: monospace;
-            font-size: 14px;
-            box-sizing: border-box;
-        }
-        
-        #customize-content {
-            padding: 20px;
-        }
-        
-        .customize-section {
-            margin-bottom: 25px;
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 10px;
-        }
-        
-        .customize-section h3 {
-            margin-top: 0;
-            margin-bottom: 15px;
-            color: #333;
-            font-size: 18px;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-            color: #555;
-        }
-        
-        .form-group input, .form-group select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-        
-        .emoji-input {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .emoji-input input[type="text"] {
-            width: 60px;
-            font-size: 20px;
-            text-align: center;
-        }
-        
-        .emoji-input .reaction-text {
-            flex-grow: 1;
-        }
-        
-        .popup-footer {
-            padding: 15px 20px;
-            background: #f8f9fa;
-            border-top: 1px solid #eee;
-            display: flex;
-            align-items: center;
-        }
-        
-        .footer-buttons {
-            display: flex;
-            gap: 10px;
-            margin-left: auto;
-        }
-        
-        .update-button {
-            background: #34a853;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        .copy-button {
-            background: #4361ee;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 16px;
-            font-weight: 600;
-        }
-        
-        .success-message {
-            display: none;
-            background: #d4edda;
-            color: #155724;
-            padding: 10px 15px;
-            border-radius: 8px;
-            margin-right: 15px;
-            font-weight: 600;
-        }
-        
-        /* Instructions */
-        .instructions {
-            text-align: center;
-            margin-top: 40px;
-            padding: 20px;
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            max-width: 400px;
-        }
-        
-        .instructions h2 {
-            margin-bottom: 15px;
-            color: #333;
-        }
-        
-        .step {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-        
-        .step-number {
-            display: inline-block;
-            width: 28px;
-            height: 28px;
-            background: #4361ee;
-            color: white;
-            border-radius: 50%;
-            text-align: center;
-            line-height: 28px;
-            margin-right: 10px;
-            font-weight: bold;
-        }
-        
-        /* Toast */
-        .toast {
-            position: fixed;
-            top: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 16px;
-            z-index: 3000;
-            display: none;
-        }
-    </style>
-</head>
-<body>
-    <div class="demo-header">
-        <h1 class="demo-title">👍i Interactive Demo</h1>
-        <p class="demo-subtitle">Tap the button below to try it out</p>
+function renderResult(el) {
+  const gate = GATE_TYPES.find(g => g.id === state.gateType);
+  const style = STYLES.find(s => s.id === state.style);
+  const colour = COLOURS.find(c => c.id === state.colour);
+  const height = HEIGHTS.find(h => h.id === state.height);
+  const width = WIDTHS.find(w => w.id === state.width);
+  const slope = SLOPE_OPTIONS.find(s => s.id === state.slope);
+  const job = JOB_TYPES.find(j => j.id === state.jobType);
+  const prop = PROPERTY_TYPES.find(p => p.id === state.propertyType);
+  const time = TIMEFRAMES.find(t => t.id === state.timeframe);
+  const extrasData = state.extras.map(id => EXTRAS.find(e => e.id === id));
+  
+  // Price calc
+  let total;
+  if (job.priceOverride) {
+    total = job.priceOverride;
+  } else {
+    const base = gate.basePrice + style.priceAdd;
+    total = Math.round(base * height.multiplier * width.multiplier);
+  }
+  
+  total += slope.priceAdd;
+  if (state.colour === 'custom') total += 200;
+  if (state.propertyType === 'commercial') total = Math.round(total * 1.2);
+  
+  const extrasTotal = extrasData.reduce((sum, e) => sum + e.price, 0);
+  total += extrasTotal;
+  
+  const low = Math.round(total * 0.9);
+  const high = Math.round(total * 1.15);
+  
+  const extrasStr = extrasData.length > 0 ? extrasData.map(e => e.name).join(', ') : 'None';
+  
+  const urgencyBadge = state.timeframe === 'asap' 
+    ? '<div style="background:#e8a838;color:#1a1a2e;display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:8px">🔥 Priority Request</div>' 
+    : '';
+  
+  el.innerHTML = `
+    <div class="section-title">Your Estimate${state.contact.name ? ', ' + state.contact.name.split(' ')[0] : ''}</div>
+    <div class="section-subtitle">Indicative pricing — Daryl will confirm after a site check.</div>
+    
+    <div class="result-card">
+      <div class="result-label">Estimated Range</div>
+      <div class="result-price">$${low.toLocaleString()} – $${high.toLocaleString()}</div>
+      <div class="result-note">Supply, fabrication & installation</div>
+      ${urgencyBadge}
     </div>
     
-    <!-- 👍i Widget Implementation -->
-    <div id="thumbs-widget">
-        <div id="thumbs-button" onclick="toggleThumbs()">
-            👍
-            <div id="i-indicator">i</div>
-        </div>
-        
-        <div id="reactions-popup" class="thumbs-popup">
-            <div class="popup-title">What do you think?</div>
-            
-            <div class="reaction-option" onclick="saveReaction('helpful')">
-                <span class="emoji">👍</span> This is helpful
-            </div>
-            
-            <div class="reaction-option" onclick="saveReaction('love')">
-                <span class="emoji">❤️</span> I love this
-            </div>
-            
-            <div class="reaction-option" onclick="saveReaction('amazing')">
-                <span class="emoji">🔥</span> This is amazing
-            </div>
-            
-            <div class="reaction-option" onclick="saveReaction('informative')">
-                <span class="emoji">💡</span> Very informative
-            </div>
-            
-            <div class="thumbs-close-button" onclick="closeThumbsPopups()">
-                Close
-            </div>
-        </div>
-        
-        <div id="stats-popup" class="thumbs-popup">
-            <div class="popup-title">Reaction Statistics</div>
-            <div id="stats-content">
-                <p>No reactions yet</p>
-            </div>
-            <div class="stats-buttons">
-                <button class="stats-code-button" onclick="openCodePopup()">Get Code</button>
-                <div class="thumbs-close-button" onclick="closeThumbsPopups()">Close</div>
-            </div>
-        </div>
+    <div class="summary-card">
+      <div class="summary-title">Your Selections</div>
+      <div class="summary-row"><span class="summary-key">Gate</span><span class="summary-val">${gate.name}</span></div>
+      <div class="summary-row"><span class="summary-key">Style</span><span class="summary-val">${style.name}</span></div>
+      <div class="summary-row"><span class="summary-key">Colour</span><span class="summary-val">${colour.name}</span></div>
+      <div class="summary-row"><span class="summary-key">Height</span><span class="summary-val">${height.label}</span></div>
+      <div class="summary-row"><span class="summary-key">Width</span><span class="summary-val">${width.label}</span></div>
+      <div class="summary-row"><span class="summary-key">Slope</span><span class="summary-val">${slope.name}</span></div>
+      <div class="summary-row"><span class="summary-key">Job Type</span><span class="summary-val">${job.name}</span></div>
+      <div class="summary-row"><span class="summary-key">Property</span><span class="summary-val">${prop.name}</span></div>
+      <div class="summary-row"><span class="summary-key">Timeframe</span><span class="summary-val">${time.name}</span></div>
+      <div class="summary-row"><span class="summary-key">Extras</span><span class="summary-val">${extrasStr}</span></div>
     </div>
     
-    <div class="instructions">
-        <h2>How it works</h2>
-        <div class="step">
-            <span class="step-number">1</span>
-            Tap the 👍i button to open reaction options
-        </div>
-        <div class="step">
-            <span class="step-number">2</span>
-            Choose a reaction to register your feedback
-        </div>
-        <div class="step">
-            <span class="step-number">3</span>
-            View statistics and get the code to use on your site
-        </div>
+    <div class="cta-card">
+      <div class="cta-title">Ready for your exact quote?</div>
+      <div class="cta-subtitle">Call Daryl now or he'll be in touch based on the details you've provided.</div>
+      <div class="cta-buttons">
+        <a href="tel:+61435817147" class="btn btn-call">📞 Call Daryl</a>
+        <a href="https://gateworld.com.au/quick-quote/" class="btn btn-quote" target="_blank">Request Quote</a>
+      </div>
     </div>
     
-    <!-- Code Popup -->
-    <div id="code-popup">
-        <div class="popup-content">
-            <div class="popup-header">
-                <div class="popup-title">👍i Widget Code</div>
-                <div class="close-button" onclick="closeCodePopup()">&times;</div>
-            </div>
-            
-            <div class="popup-tabs">
-                <button class="popup-tab active" onclick="switchTab('code')">Code</button>
-                <button class="popup-tab" onclick="switchTab('customize')">Customize</button>
-            </div>
-            
-            <div id="code-tab" class="tab-content active">
-                <textarea id="code-content" readonly></textarea>
-            </div>
-            
-            <div id="customize-tab" class="tab-content">
-                <div id="customize-content">
-                    <div class="customize-section">
-                        <h3>Reactions</h3>
-                        <div class="form-group emoji-input">
-                            <input type="text" id="emoji1" value="👍" maxlength="2">
-                            <input type="text" id="reaction1" class="reaction-text" value="This is helpful">
-                        </div>
-                        <div class="form-group emoji-input">
-                            <input type="text" id="emoji2" value="❤️" maxlength="2">
-                            <input type="text" id="reaction2" class="reaction-text" value="I love this">
-                        </div>
-                        <div class="form-group emoji-input">
-                            <input type="text" id="emoji3" value="🔥" maxlength="2">
-                            <input type="text" id="reaction3" class="reaction-text" value="This is amazing">
-                        </div>
-                        <div class="form-group emoji-input">
-                            <input type="text" id="emoji4" value="💡" maxlength="2">
-                            <input type="text" id="reaction4" class="reaction-text" value="Very informative">
-                        </div>
-                    </div>
-                    
-                    <div class="customize-section">
-                        <h3>Appearance</h3>
-                        <div class="form-group">
-                            <label for="primary-color">Primary Color</label>
-                            <input type="color" id="primary-color" value="#4361ee">
-                        </div>
-                        <div class="form-group">
-                            <label for="button-position">Position</label>
-                            <select id="button-position">
-                                <option value="bottom-right">Bottom Right</option>
-                                <option value="bottom-left">Bottom Left</option>
-                                <option value="top-right">Top Right</option>
-                                <option value="top-left">Top Left</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="customize-section">
-                        <h3>Text</h3>
-                        <div class="form-group">
-                            <label for="popup-heading">Reactions Popup Heading</label>
-                            <input type="text" id="popup-heading" value="What do you think?">
-                        </div>
-                        <div class="form-group">
-                            <label for="stats-heading">Stats Popup Heading</label>
-                            <input type="text" id="stats-heading" value="Reaction Statistics">
-                        </div>
-                        <div class="form-group">
-                            <label for="button-text">Main Button Emoji</label>
-                            <input type="text" id="button-text" value="👍" maxlength="2" style="font-size: 20px; text-align: center;">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="popup-footer">
-                <span id="success-message" class="success-message">Code copied!</span>
-                <div class="footer-buttons">
-                    <button id="update-button" class="update-button" onclick="updateCustomizations()">Update Code</button>
-                    <button class="copy-button" onclick="copyCode()">Copy Code</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <div id="toast" class="toast"></div>
-    // Add this script tag to the end of the HTML body
-<script>
-    // 👍i Widget Functionality
-    var reactions = {
-        helpful: 0,
-        love: 0,
-        amazing: 0,
-        informative: 0
-    };
-
-    // Try to load saved data
-    try {
-        var savedReactions = localStorage.getItem('thumbs-widget-reactions');
-        if (savedReactions) {
-            reactions = JSON.parse(savedReactions);
-        }
-    } catch(e) {
-        console.log('Could not load saved reactions');
-    }
-
-    // Toggle reactions popup
-    function toggleThumbs() {
-        closeThumbsPopups();
-        document.getElementById('reactions-popup').style.display = 'block';
-    }
-
-    // Save reaction and show stats
-    function saveReaction(type) {
-        // Increment the selected reaction type
-        reactions[type]++;
-        
-        // Save to localStorage
-        try {
-            localStorage.setItem('thumbs-widget-reactions', JSON.stringify(reactions));
-        } catch(e) {
-            console.log('Could not save reaction');
-        }
-        
-        showToast("Thank you for your feedback!");
-        closeThumbsPopups();
-        updateStats();
-        document.getElementById('stats-popup').style.display = 'block';
-    }
-
-    // Close all popups
-    function closeThumbsPopups() {
-        document.getElementById('reactions-popup').style.display = 'none';
-        document.getElementById('stats-popup').style.display = 'none';
-    }
-
-    // Update statistics display
-    function updateStats() {
-        var total = reactions.helpful + reactions.love + reactions.amazing + reactions.informative;
-        var statsContent = document.getElementById('stats-content');
-        
-        if (total === 0) {
-            statsContent.innerHTML = '<p>No reactions yet</p>';
-            return;
-        }
-        
-        var helpfulPercent = Math.round((reactions.helpful / total) * 100) || 0;
-        var lovePercent = Math.round((reactions.love / total) * 100) || 0;
-        var amazingPercent = Math.round((reactions.amazing / total) * 100) || 0;
-        var informativePercent = Math.round((reactions.informative / total) * 100) || 0;
-        
-        var html = '<p><strong>Total reactions:</strong> ' + total + '</p>';
-        
-        html += '<div class="stats-item">';
-        html += '<div>👍 This is helpful: ' + reactions.helpful + ' (' + helpfulPercent + '%)</div>';
-        html += '<div class="progress-bar"><div class="progress" style="width:' + helpfulPercent + '%"></div></div>';
-        html += '</div>';
-        
-        html += '<div class="stats-item">';
-        html += '<div>❤️ I love this: ' + reactions.love + ' (' + lovePercent + '%)</div>';
-        html += '<div class="progress-bar"><div class="progress" style="width:' + lovePercent + '%"></div></div>';
-        html += '</div>';
-        
-        html += '<div class="stats-item">';
-        html += '<div>🔥 This is amazing: ' + reactions.amazing + ' (' + amazingPercent + '%)</div>';
-        html += '<div class="progress-bar"><div class="progress" style="width:' + amazingPercent + '%"></div></div>';
-        html += '</div>';
-        
-        html += '<div class="stats-item">';
-        html += '<div>💡 Very informative: ' + reactions.informative + ' (' + informativePercent + '%)</div>';
-        html += '<div class="progress-bar"><div class="progress" style="width:' + informativePercent + '%"></div></div>';
-        html += '</div>';
-        
-        statsContent.innerHTML = html;
-        
-        // Animate progress bars
-        setTimeout(function() {
-            var bars = document.querySelectorAll('.progress');
-            bars.forEach(function(bar) {
-                var width = bar.style.width;
-                bar.style.width = '0%';
-                setTimeout(function() {
-                    bar.style.width = width;
-                }, 50);
-            });
-        }, 50);
-    }
-
-    // Display toast message
-    function showToast(message) {
-        const toast = document.getElementById('toast');
-        toast.textContent = message;
-        toast.style.display = 'block';
-        
-        setTimeout(function() {
-            toast.style.display = 'none';
-        }, 2000);
-    }
-
-    // Open code popup
-    function openCodePopup() {
-        document.getElementById('code-popup').style.display = 'flex';
-        generateCode();
-    }
-    
-    // Close code popup
-    function closeCodePopup() {
-        document.getElementById('code-popup').style.display = 'none';
-    }
-    
-    // Switch between code and customize tabs
-    function switchTab(tabName) {
-        const tabs = document.querySelectorAll('.popup-tab');
-        const tabContents = document.querySelectorAll('.tab-content');
-        
-        tabs.forEach(tab => tab.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-        
-        document.querySelector(`.popup-tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
-        document.getElementById(`${tabName}-tab`).classList.add('active');
-    }
-    
-    // Update code based on customizations
-    function updateCustomizations() {
-        generateCode();
-        showToast("Code updated with your customizations!");
-        switchTab('code');
-    }
-    
-    // Copy code to clipboard
-    function copyCode() {
-        const codeContent = document.getElementById('code-content');
-        codeContent.select();
-        document.execCommand('copy');
-        
-        const successMessage = document.getElementById('success-message');
-        successMessage.style.display = 'inline-block';
-        
-        setTimeout(function() {
-            successMessage.style.display = 'none';
-        }, 2000);
-    }
-    
-    // Generate customized code
-    function generateCode() {
-        // Get customization values
-        const emoji1 = document.getElementById('emoji1').value || '👍';
-        const emoji2 = document.getElementById('emoji2').value || '❤️';
-        const emoji3 = document.getElementById('emoji3').value || '🔥';
-        const emoji4 = document.getElementById('emoji4').value || '💡';
-        
-        const reaction1 = document.getElementById('reaction1').value || 'This is helpful';
-        const reaction2 = document.getElementById('reaction2').value || 'I love this';
-        const reaction3 = document.getElementById('reaction3').value || 'This is amazing';
-        const reaction4 = document.getElementById('reaction4').value || 'Very informative';
-        
-        const primaryColor = document.getElementById('primary-color').value || '#4361ee';
-        const position = document.getElementById('button-position').value || 'bottom-right';
-        
-        const popupHeading = document.getElementById('popup-heading').value || 'What do you think?';
-        const statsHeading = document.getElementById('stats-heading').value || 'Reaction Statistics';
-        const buttonText = document.getElementById('button-text').value || '👍';
-        
-        // Generate position CSS
-        let positionCSS = 'bottom: 20px; right: 20px;';
-        if (position === 'bottom-left') positionCSS = 'bottom: 20px; left: 20px;';
-        if (position === 'top-right') positionCSS = 'top: 20px; right: 20px;';
-        if (position === 'top-left') positionCSS = 'top: 20px; left: 20px;';
-        
-        // Generate code with customizations
-        const customCode = `<!-- 👍i Widget with Reactions and Stats -->
-<style>
-#thumbs-widget {
-    position: fixed;
-    ${positionCSS}
-    z-index: 9999;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    <div class="start-over" onclick="reset()">Start over</div>
+  `;
 }
 
-#thumbs-button {
-    width: 70px;
-    height: 70px;
-    background: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 36px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    cursor: pointer;
-    position: relative;
+// ─── ACTIONS ───
+function select(key, val) { state[key] = val; render(); }
+function toggleExtra(id) {
+  state.extras = state.extras.includes(id) ? state.extras.filter(e => e !== id) : [...state.extras, id];
+  render();
+}
+function updateContact(field, val) {
+  state.contact[field] = val;
+  // Don't re-render the whole thing (would lose focus), just update nav
+  const nav = document.getElementById('nav');
+  const canProceed = state.contact.name && state.contact.phone;
+  const hasBack = state.step > 0;
+  nav.innerHTML = `<div class="nav-row has-back">
+    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
+    <button class="btn btn-primary" onclick="goNext()" ${!canProceed ? 'disabled' : ''}>See My Estimate →</button>
+  </div>`;
 }
 
-#i-indicator {
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: 28px;
-    height: 28px;
-    background: ${primaryColor};
-    color: white;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 18px;
-    font-style: italic;
-    font-weight: bold;
+function goNext() {
+  const card = document.getElementById('mainCard');
+  card.classList.add('animating');
+  setTimeout(() => { state.step++; render(); card.classList.remove('animating'); }, 200);
+}
+function goBack() {
+  const card = document.getElementById('mainCard');
+  card.classList.add('animating');
+  setTimeout(() => { state.step--; render(); card.classList.remove('animating'); }, 200);
+}
+function reset() {
+  state = { step: 0, gateType: null, style: null, colour: null, height: null, width: null, slope: null, jobType: null, propertyType: null, timeframe: null, extras: [], contact: { name: '', phone: '', email: '', suburb: '' } };
+  render();
 }
 
-.thumbs-popup {
-    position: absolute;
-    ${position.includes('top') ? 'top: 80px;' : 'bottom: 80px;'}
-    ${position.includes('left') ? 'left: 0;' : 'right: 0;'}
-    background: white;
-    width: 320px;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.25);
-    display: none;
-}
-
-.popup-title {
-    font-weight: bold;
-    margin-bottom: 20px;
-    color: #333;
-    font-size: 18px;
-}
-
-.reaction-option {
-    display: flex;
-    align-items: center;
-    padding: 12px 16px;
-    margin-bottom: 12px;
-    background: #f8f9fa;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 16px;
-}
-
-.reaction-option:hover {
-    background: #e9ecef;
-    transform: translateY(-2px);
-    transition: all 0.2s ease;
-}
-
-.emoji {
-    font-size: 28px;
-    margin-right: 15px;
-}
-
-.thumbs-close-button {
-    color: ${primaryColor};
-    text-align: center;
-    cursor: pointer;
-    margin-top: 15px;
-    font-size: 16px;
-}
-
-.stats-item {
-    margin: 15px 0;
-    font-size: 16px;
-}
-
-.progress-bar {
-    height: 10px;
-    background: #e9ecef;
-    border-radius: 5px;
-    margin-top: 8px;
-    overflow: hidden;
-}
-
-.progress {
-    height: 100%;
-    background: ${primaryColor};
-    width: 0%;
-    transition: width 0.5s ease-out;
-}
-
-.stats-buttons {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 20px;
-}
-
-.stats-code-button {
-    background: ${primaryColor};
-    color: white;
-    border: none;
-    padding: 10px 16px;
-    border-radius: 6px;
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: 600;
-}
-
-/* Mobile Optimization */
-@media (max-width: 480px) {
-    .thumbs-popup {
-        width: 280px;
-    }
-    
-    .reaction-option {
-        padding: 10px 14px;
-    }
-    
-    .emoji {
-        font-size: 24px;
-    }
-}
-</style>
-
-<div id="thumbs-widget">
-    <div id="thumbs-button" onclick="toggleThumbs()">
-        ${buttonText}
-        <div id="i-indicator">i</div>
-    </div>
-    
-    <div id="reactions-popup" class="thumbs-popup">
-        <div class="popup-title">${popupHeading}</div>
-        
-        <div class="reaction-option" onclick="saveReaction('reaction1')">
-            <span class="emoji">${emoji1}</span> ${reaction1}
-        </div>
-        
-        <div class="reaction-option" onclick="saveReaction('reaction2')">
-            <span class="emoji">${emoji2}</span> ${reaction2}
-        </div>
-        
-        <div class="reaction-option" onclick="saveReaction('reaction3')">
-            <span class="emoji">${emoji3}</span> ${reaction3}
-        </div>
-        
-        <div class="reaction-option" onclick="saveReaction('reaction4')">
-            <span class="emoji">${emoji4}</span> ${reaction4}
-        </div>
-        
-        <div class="thumbs-close-button" onclick="closeThumbsPopups()">
-            Close
-        </div>
-    </div>
-    
-    <div id="stats-popup" class="thumbs-popup">
-        <div class="popup-title">${statsHeading}</div>
-        <div id="stats-content">
-            <p>No reactions yet</p>
-        </div>
-        <div class="stats-buttons">
-            <button class="stats-code-button" onclick="openCodePopup()">Get Code</button>
-            <div class="thumbs-close-button" onclick="closeThumbsPopups()">Close</div>
-        </div>
-    </div>
-</div>
-
-<script>
-// Widget data
-var reactions = {
-    reaction1: 0,
-    reaction2: 0,
-    reaction3: 0,
-    reaction4: 0
-};
-
-// Reaction labels for display
-var reactionLabels = {
-    reaction1: "${emoji1} ${reaction1}",
-    reaction2: "${emoji2} ${reaction2}",
-    reaction3: "${emoji3} ${reaction3}",
-    reaction4: "${emoji4} ${reaction4}"
-};
-
-// Try to load saved data
-try {
-    var savedReactions = localStorage.getItem('thumbs-widget-reactions');
-    if (savedReactions) {
-        reactions = JSON.parse(savedReactions);
-    }
-} catch(e) {
-    console.log('Could not load saved reactions');
-}
-
-// Toggle reactions popup
-function toggleThumbs() {
-    closeThumbsPopups();
-    document.getElementById('reactions-popup').style.display = 'block';
-}
-
-// Save reaction and show stats
-function saveReaction(type) {
-    // Increment the selected reaction type
-    reactions[type]++;
-    
-    // Save to localStorage
-    try {
-        localStorage.setItem('thumbs-widget-reactions', JSON.stringify(reactions));
-    } catch(e) {
-        console.log('Could not save reaction');
-    }
-    
-    closeThumbsPopups();
-    updateStats();
-    document.getElementById('stats-popup').style.display = 'block';
-}
-
-// Close all popups
-function closeThumbsPopups() {
-    document.getElementById('reactions-popup').style.display = 'none';
-    document.getElementById('stats-popup').style.display = 'none';
-}
-
-// Update statistics display
-function updateStats() {
-    var total = reactions.reaction1 + reactions.reaction2 + reactions.reaction3 + reactions.reaction4;
-    var statsContent = document.getElementById('stats-content');
-    
-    if (total === 0) {
-        statsContent.innerHTML = '<p>No reactions yet</p>';
-        return;
-    }
-    
-    var reaction1Percent = Math.round((reactions.reaction1 / total) * 100) || 0;
-    var reaction2Percent = Math.round((reactions.reaction2 / total) * 100) || 0;
-    var reaction3Percent = Math.round((reactions.reaction3 / total) * 100) || 0;
-    var reaction4Percent = Math.round((reactions.reaction4 / total) * 100) || 0;
-    
-    var html = '<p><strong>Total reactions:</strong> ' + total + '</p>';
-    
-    html += '<div class="stats-item">';
-    html += '<div>' + reactionLabels.reaction1 + ': ' + reactions.reaction1 + ' (' + reaction1Percent + '%)</div>';
-    html += '<div class="progress-bar"><div class="progress" style="width:' + reaction1Percent + '%"></div></div>';
-    html += '</div>';
-    
-    html += '<div class="stats-item">';
-    html += '<div>' + reactionLabels.reaction2 + ': ' + reactions.reaction2 + ' (' + reaction2Percent + '%)</div>';
-    html += '<div class="progress-bar"><div class="progress" style="width:' + reaction2Percent + '%"></div></div>';
-    html += '</div>';
-    
-    html += '<div class="stats-item">';
-    html += '<div>' + reactionLabels.reaction3 + ': ' + reactions.reaction3 + ' (' + reaction3Percent + '%)</div>';
-    html += '<div class="progress-bar"><div class="progress" style="width:' + reaction3Percent + '%"></div></div>';
-    html += '</div>';
-    
-    html += '<div class="stats-item">';
-    html += '<div>' + reactionLabels.reaction4 + ': ' + reactions.reaction4 + ' (' + reaction4Percent + '%)</div>';
-    html += '<div class="progress-bar"><div class="progress" style="width:' + reaction4Percent + '%"></div></div>';
-    html += '</div>';
-    
-    statsContent.innerHTML = html;
-}
-<\/script>`;
-
-        
-        
+// ─── INIT ───
+render();
+</script>
+</body>
+</html>
