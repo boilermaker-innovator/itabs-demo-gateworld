@@ -7,711 +7,740 @@
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  html, body { 
-    min-height: 100vh; 
-    font-family: 'DM Sans', sans-serif; 
-    background: linear-gradient(180deg, #f5f0eb 0%, #e8e2da 100%);
-    color: #1a1a2e;
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #f0ebe4;
+    min-height: 100vh;
     -webkit-font-smoothing: antialiased;
   }
-  
-  .container {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 24px 16px 40px;
+  .fake-site { max-width: 800px; margin: 0 auto; padding: 40px 24px; }
+  .fake-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 48px; }
+  .fake-logo { font-size: 22px; font-weight: 700; color: #1a1a2e; font-family: 'Playfair Display', serif; }
+  .fake-links { display: flex; gap: 20px; }
+  .fake-links a { color: #6b7280; text-decoration: none; font-size: 14px; }
+  .fake-hero {
+    background: linear-gradient(135deg, #1a1a2e, #2d3142);
+    border-radius: 20px; padding: 48px 32px; color: #fff; margin-bottom: 32px;
   }
-  
-  /* Header */
-  .header { text-align: center; margin-bottom: 28px; }
-  .header-brand { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: #9ca3af; margin-bottom: 6px; }
-  .header-title { font-size: 20px; font-weight: 700; font-family: 'Playfair Display', serif; color: #1a1a2e; }
-  .header-line { width: 40px; height: 3px; background: #e8a838; border-radius: 2px; margin: 12px auto 0; }
-  .header-rating { margin-top: 12px; font-size: 13px; color: #9ca3af; }
-  .header-rating span { color: #e8a838; }
-  
-  /* Card */
-  .card {
-    background: #fff;
-    border-radius: 20px;
-    padding: 28px 24px;
-    box-shadow: 0 8px 40px rgba(0,0,0,0.08), 0 1px 3px rgba(0,0,0,0.04);
-    transition: opacity 0.25s ease, transform 0.25s ease;
+  .fake-hero h1 { font-family: 'Playfair Display', serif; font-size: 32px; margin-bottom: 12px; line-height: 1.2; }
+  .fake-hero h1 span { color: #e8a838; }
+  .fake-hero p { color: rgba(255,255,255,0.5); font-size: 15px; line-height: 1.6; }
+  .fake-content { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 32px; }
+  .fake-card { background: #fff; border-radius: 16px; padding: 24px; border: 1px solid #e8e2da; }
+  .fake-card h3 { font-size: 16px; color: #1a1a2e; margin-bottom: 6px; }
+  .fake-card p { font-size: 13px; color: #9ca3af; line-height: 1.5; }
+  .fake-hint { text-align: center; padding: 40px 20px; color: #c4beb6; font-size: 14px; }
+  .fake-hint span { color: #e8a838; font-weight: 600; }
+  @media (max-width: 600px) {
+    .fake-content { grid-template-columns: 1fr; }
+    .fake-hero { padding: 32px 20px; }
+    .fake-hero h1 { font-size: 26px; }
+    .fake-links { display: none; }
   }
-  .card.animating { opacity: 0; transform: translateX(-12px); }
-  
-  /* Steps */
-  .steps { display: flex; align-items: center; gap: 5px; margin-bottom: 24px; }
-  .step-dot {
-    height: 6px; border-radius: 3px; background: #e0dbd4;
-    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); flex: 1;
+
+  /* ─── SETUP BANNER ─── */
+  .setup-banner {
+    max-width: 600px; margin: 0 auto 20px; padding: 20px 24px;
+    background: #fff; border-radius: 14px; border: 2px solid #e8a838;
+    box-shadow: 0 4px 16px rgba(232,168,56,0.12);
   }
-  .step-dot.active { background: #e8a838; flex: 2; }
-  .step-dot.done { background: #e8a838; }
-  .step-label {
-    margin-left: 6px; font-size: 11px; color: #9ca3af;
-    letter-spacing: 1px; text-transform: uppercase; white-space: nowrap;
+  .setup-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 6px; }
+  .setup-text { font-size: 13px; color: #6b7280; line-height: 1.6; margin-bottom: 12px; }
+  .setup-steps { font-size: 12px; color: #9ca3af; line-height: 1.8; }
+  .setup-steps strong { color: #1a1a2e; }
+  .setup-input-row { display: flex; gap: 8px; margin-top: 12px; }
+  .setup-input {
+    flex: 1; padding: 10px 14px; border-radius: 8px; border: 2px solid #e8e2da;
+    font-size: 14px; font-family: 'DM Sans', sans-serif; outline: none;
   }
-  
-  /* Section */
-  .section-title {
-    font-size: 22px; font-weight: 700; font-family: 'Playfair Display', serif;
-    color: #1a1a2e; margin-bottom: 4px; line-height: 1.2;
+  .setup-input:focus { border-color: #e8a838; }
+  .setup-btn {
+    padding: 10px 20px; border-radius: 8px; background: #e8a838; color: #1a1a2e;
+    border: none; font-weight: 700; font-size: 13px; cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
   }
-  .section-subtitle { font-size: 13px; color: #9ca3af; margin-bottom: 22px; line-height: 1.5; }
-  
-  /* Option Cards */
-  .option {
-    padding: 16px; border-radius: 14px; border: 2px solid #e8e2da;
-    background: #fff; cursor: pointer; transition: all 0.2s ease;
-    margin-bottom: 8px; position: relative; -webkit-user-select: none; user-select: none;
+  .setup-status { margin-top: 8px; font-size: 12px; }
+  .setup-ok { color: #4a7c59; }
+  .setup-err { color: #c4564a; }
+
+  /* ─── FAB ─── */
+  .fab {
+    position: fixed; bottom: 24px; right: 24px; z-index: 9998;
+    display: flex; align-items: center; gap: 10px; padding: 0 22px 0 0;
+    height: 56px; border-radius: 28px;
+    background: linear-gradient(135deg, #e8a838, #d4952e);
+    color: #1a1a2e; border: none; cursor: pointer;
+    box-shadow: 0 6px 24px rgba(232,168,56,0.35), 0 2px 8px rgba(0,0,0,0.1);
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 700;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    -webkit-user-select: none; user-select: none;
+    animation: fabEnter 0.5s ease 0.5s both;
   }
-  .option:active { transform: scale(0.98); }
-  .option.selected {
-    border-color: #e8a838;
-    background: linear-gradient(135deg, #fdf6ec, #fef9f1);
-    box-shadow: 0 4px 16px rgba(232,168,56,0.1);
-  }
-  .option-check {
-    position: absolute; top: 10px; right: 10px; width: 20px; height: 20px;
-    border-radius: 10px; background: #e8a838; display: none;
-    align-items: center; justify-content: center; font-size: 11px; color: #fff; font-weight: 700;
-  }
-  .option.selected .option-check { display: flex; }
-  
-  .option-row { display: flex; align-items: center; gap: 14px; }
-  .option-icon {
-    width: 50px; height: 50px; border-radius: 12px;
+  .fab:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(232,168,56,0.4); }
+  .fab:active { transform: scale(0.96); }
+  .fab-icon {
+    width: 56px; height: 56px; border-radius: 28px; background: #1a1a2e;
     display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
   }
-  .option-name { font-size: 15px; font-weight: 600; color: #1a1a2e; }
-  .option-desc { font-size: 11px; color: #9ca3af; margin-top: 1px; }
-  .option-price { font-size: 12px; color: #e8a838; font-weight: 600; margin-top: 2px; }
-  
-  /* Style Grid */
-  .style-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .style-option {
-    padding: 14px; border-radius: 14px; border: 2px solid #e8e2da;
-    background: #fff; cursor: pointer; transition: all 0.2s ease;
+  .fab.open .fab-icon { font-size: 18px; }
+  .fab-text { white-space: nowrap; }
+  .fab::before {
+    content: ''; position: absolute; left: 0; top: 0; right: 0; bottom: 0;
+    border-radius: 28px; box-shadow: 0 0 0 0 rgba(232,168,56,0.4);
+    animation: fabPulse 3s ease-in-out infinite 2s;
+  }
+  .fab.open::before { animation: none; }
+  @keyframes fabPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(232,168,56,0.4); }
+    50% { box-shadow: 0 0 0 12px rgba(232,168,56,0); }
+  }
+  @keyframes fabEnter {
+    from { opacity: 0; transform: translateY(20px) scale(0.9); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @media (max-width: 480px) {
+    .fab { padding: 0; width: 60px; height: 60px; border-radius: 30px; }
+    .fab-icon { width: 60px; height: 60px; border-radius: 30px; }
+    .fab-text { display: none; }
+    .fab::before { border-radius: 30px; }
+  }
+
+  /* ─── POPUP ─── */
+  .popup-overlay {
+    position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.5); z-index: 9999;
+    display: none; align-items: flex-end; justify-content: flex-end;
+    padding: 16px; animation: overlayIn 0.3s ease;
+  }
+  .popup-overlay.visible { display: flex; }
+  @keyframes overlayIn { from { opacity: 0; } to { opacity: 1; } }
+  .popup {
+    width: 100%; max-width: 420px; max-height: calc(100vh - 32px);
+    background: linear-gradient(180deg, #f5f0eb, #e8e2da);
+    border-radius: 20px; box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+    display: flex; flex-direction: column; overflow: hidden;
+    animation: popupIn 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  @keyframes popupIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  @media (max-width: 480px) {
+    .popup-overlay { padding: 0; align-items: stretch; justify-content: stretch; }
+    .popup { max-width: 100%; max-height: 100vh; border-radius: 0; }
+  }
+  .popup-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; background: #1a1a2e; flex-shrink: 0;
+  }
+  .popup-header-left { display: flex; align-items: center; gap: 10px; }
+  .popup-header-icon {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: rgba(232,168,56,0.15);
+    display: flex; align-items: center; justify-content: center; font-size: 16px;
+  }
+  .popup-header-text h3 { font-size: 14px; font-weight: 700; color: #fff; font-family: 'Playfair Display', serif; }
+  .popup-header-text span { font-size: 11px; color: rgba(255,255,255,0.4); }
+  .popup-close {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: rgba(255,255,255,0.08); border: none; cursor: pointer;
+    color: rgba(255,255,255,0.5); font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .popup-close:hover { background: rgba(255,255,255,0.15); color: #fff; }
+  .popup-body {
+    flex: 1; overflow-y: auto; padding: 20px; -webkit-overflow-scrolling: touch;
+  }
+  .popup-body::-webkit-scrollbar { width: 4px; }
+  .popup-body::-webkit-scrollbar-thumb { background: #d1ccc5; border-radius: 2px; }
+
+  /* ─── WIDGET STYLES ─── */
+  .w-steps { display: flex; align-items: center; gap: 4px; margin-bottom: 20px; }
+  .w-dot { height: 5px; border-radius: 3px; background: #e0dbd4; transition: all 0.4s; flex: 1; }
+  .w-dot.active { background: #e8a838; flex: 2; }
+  .w-dot.done { background: #e8a838; }
+  .w-step-label { margin-left: 4px; font-size: 10px; color: #9ca3af; letter-spacing: 1px; text-transform: uppercase; white-space: nowrap; }
+  .w-title { font-size: 20px; font-weight: 700; font-family: 'Playfair Display', serif; color: #1a1a2e; margin-bottom: 3px; line-height: 1.2; }
+  .w-subtitle { font-size: 12px; color: #9ca3af; margin-bottom: 18px; line-height: 1.4; }
+  .w-opt {
+    padding: 14px; border-radius: 12px; border: 2px solid #e8e2da;
+    background: #fff; cursor: pointer; transition: all 0.2s; margin-bottom: 7px;
     position: relative; -webkit-user-select: none; user-select: none;
   }
-  .style-option:active { transform: scale(0.97); }
-  .style-option.selected { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); }
-  .style-option .option-check { top: 8px; right: 8px; width: 18px; height: 18px; font-size: 10px; }
-  .style-option.selected .option-check { display: flex; }
-  .style-preview { width: 100%; height: 60px; border-radius: 8px; margin-bottom: 8px; }
-  .style-name { font-size: 13px; font-weight: 600; color: #1a1a2e; }
-  .style-extra { font-size: 11px; color: #9ca3af; margin-top: 1px; }
-  .style-badge {
-    position: absolute; top: 56px; right: 10px; background: #e8a838; color: #1a1a2e;
-    font-size: 8px; font-weight: 700; padding: 2px 6px; border-radius: 3px;
-    text-transform: uppercase; letter-spacing: 0.5px;
+  .w-opt:active { transform: scale(0.98); }
+  .w-opt.sel { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); box-shadow: 0 3px 12px rgba(232,168,56,0.1); }
+  .w-chk {
+    position: absolute; top: 8px; right: 8px; width: 18px; height: 18px;
+    border-radius: 9px; background: #e8a838; display: none;
+    align-items: center; justify-content: center; font-size: 10px; color: #fff; font-weight: 700;
   }
-  
-  /* Colour Grid */
-  .colour-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-  .colour-option {
-    padding: 12px; border-radius: 12px; border: 2px solid #e8e2da;
-    background: #fff; cursor: pointer; transition: all 0.2s ease;
-    text-align: center; position: relative; -webkit-user-select: none; user-select: none;
-  }
-  .colour-option:active { transform: scale(0.96); }
-  .colour-option.selected { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); }
-  .colour-option .option-check { top: 6px; right: 6px; width: 18px; height: 18px; font-size: 10px; }
-  .colour-option.selected .option-check { display: flex; }
-  .colour-swatch {
-    width: 100%; height: 48px; border-radius: 8px; margin-bottom: 8px;
-    border: 1px solid rgba(0,0,0,0.08);
-  }
-  .colour-name { font-size: 11px; font-weight: 600; color: #1a1a2e; }
-  .colour-code { font-size: 9px; color: #9ca3af; margin-top: 1px; }
-  
-  /* Height visual */
-  .height-visual {
-    display: flex; align-items: flex-end; gap: 4px; height: 44px;
-    margin-right: 16px;
-  }
-  .height-bar {
-    width: 4px; background: #e0dbd4; border-radius: 2px; transition: all 0.3s ease;
-  }
-  .option.selected .height-bar { background: #e8a838; }
-  
-  /* Width bar */
-  .width-bar { height: 6px; border-radius: 3px; background: #e8e2da; transition: all 0.3s ease; }
-  .option.selected .width-bar { background: linear-gradient(90deg, #e8a838, #f0b84d); }
-  .width-row, .height-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; }
-  .width-label, .height-label { font-size: 15px; font-weight: 600; color: #1a1a2e; white-space: nowrap; }
-  .height-desc { font-size: 11px; color: #9ca3af; }
-  
-  /* Job type grid */
-  .job-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .job-option {
-    padding: 20px 14px; border-radius: 14px; border: 2px solid #e8e2da;
-    background: #fff; cursor: pointer; transition: all 0.2s ease;
-    text-align: center; position: relative; -webkit-user-select: none; user-select: none;
-  }
-  .job-option:active { transform: scale(0.97); }
-  .job-option.selected { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); }
-  .job-option .option-check { top: 8px; right: 8px; width: 18px; height: 18px; font-size: 10px; }
-  .job-option.selected .option-check { display: flex; }
-  .job-icon { font-size: 28px; margin-bottom: 8px; }
-  .job-name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
-  .job-desc { font-size: 11px; color: #9ca3af; margin-top: 3px; line-height: 1.4; }
-  
-  /* Timeframe */
-  .time-icon { font-size: 20px; margin-right: 4px; }
-  
-  /* Extras */
-  .extra-row { display: flex; align-items: center; justify-content: space-between; }
-  .extra-left { display: flex; align-items: center; gap: 12px; }
-  .extra-icon { font-size: 20px; }
-  .extra-name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
-  .extra-price { font-size: 13px; font-weight: 600; color: #9ca3af; transition: color 0.2s; }
-  .option.selected .extra-price { color: #e8a838; }
-  
-  /* Result */
-  .result-card {
-    background: linear-gradient(135deg, #1a1a2e 0%, #2d3142 100%);
-    border-radius: 18px; padding: 28px 24px; margin-bottom: 16px;
-    text-align: center; animation: slideUp 0.5s ease both;
-  }
-  .result-label { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 6px; }
-  .result-price { font-size: 36px; font-weight: 700; font-family: 'Playfair Display', serif; color: #e8a838; line-height: 1.1; }
-  .result-note { font-size: 11px; color: rgba(255,255,255,0.35); margin-top: 6px; }
-  
-  .summary-card {
-    background: #fff; border-radius: 14px; padding: 18px; border: 1px solid #e8e2da;
-    margin-bottom: 16px; animation: slideUp 0.5s ease 0.1s both;
-  }
-  .summary-title { font-size: 10px; color: #9ca3af; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 12px; }
-  .summary-row {
-    display: flex; justify-content: space-between; padding: 7px 0;
-    border-bottom: 1px solid #f5f0eb; font-size: 13px;
-  }
-  .summary-row:last-child { border-bottom: none; }
-  .summary-key { color: #9ca3af; }
-  .summary-val { color: #1a1a2e; font-weight: 600; text-align: right; max-width: 55%; }
-  
-  .cta-card {
-    background: linear-gradient(135deg, #fdf6ec, #fef9f1);
-    border-radius: 14px; padding: 22px; border: 2px solid #e8a838;
-    text-align: center; margin-bottom: 14px; animation: slideUp 0.5s ease 0.2s both;
-  }
-  .cta-title { font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
-  .cta-subtitle { font-size: 12px; color: #9ca3af; margin-bottom: 16px; line-height: 1.5; }
-  .cta-buttons { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
-  
-  /* Buttons */
-  .btn {
-    padding: 13px 24px; border-radius: 10px; font-size: 14px; font-weight: 600;
-    font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s ease;
-    border: none; -webkit-user-select: none; user-select: none; text-decoration: none;
-    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-  }
-  .btn:active { transform: scale(0.97); }
-  .btn-primary { background: #e8a838; color: #1a1a2e; box-shadow: 0 4px 16px rgba(232,168,56,0.25); }
-  .btn-primary:disabled { background: #d1ccc5; color: #9ca3af; box-shadow: none; cursor: not-allowed; transform: none; }
-  .btn-secondary { background: transparent; color: #1a1a2e; border: 2px solid #d1ccc5; }
-  .btn-call { background: #e8a838; color: #1a1a2e; padding: 13px 20px; font-size: 15px; font-weight: 700; box-shadow: 0 4px 16px rgba(232,168,56,0.25); }
-  .btn-quote { background: transparent; color: #1a1a2e; border: 2px solid #d1ccc5; padding: 13px 20px; }
-  
-  .nav-row { display: flex; justify-content: flex-end; margin-top: 22px; gap: 10px; }
-  .nav-row.has-back { justify-content: space-between; }
-  
-  .start-over { text-align: center; font-size: 12px; color: #9ca3af; cursor: pointer; text-decoration: underline; padding: 8px; }
-  
-  .footer { text-align: center; margin-top: 20px; font-size: 11px; color: #c4beb6; line-height: 1.5; }
-  .powered-by { text-align: center; margin-top: 10px; padding-top: 10px; border-top: 1px solid #e8e2da; font-size: 10px; color: #c4beb6; }
-  .powered-by a { color: #9ca3af; text-decoration: none; font-weight: 600; }
-  
-  /* Contact form */
-  .form-row { margin-bottom: 14px; }
-  .form-label { display: block; font-size: 12px; font-weight: 600; color: #1a1a2e; margin-bottom: 4px; }
-  .form-input {
-    width: 100%; padding: 12px 14px; border-radius: 10px; border: 2px solid #e8e2da;
+  .w-opt.sel .w-chk { display: flex; }
+  .w-row { display: flex; align-items: center; gap: 12px; }
+  .w-icon { width: 44px; height: 44px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; }
+  .w-name { font-size: 14px; font-weight: 600; color: #1a1a2e; }
+  .w-desc { font-size: 11px; color: #9ca3af; margin-top: 1px; }
+  .w-price { font-size: 11px; color: #e8a838; font-weight: 600; margin-top: 1px; }
+  .w-grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+  .w-grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; }
+  .w-style { padding: 12px; border-radius: 12px; border: 2px solid #e8e2da; background: #fff; cursor: pointer; transition: all 0.2s; position: relative; }
+  .w-style:active { transform: scale(0.97); }
+  .w-style.sel { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); }
+  .w-style .w-chk { top: 6px; right: 6px; width: 16px; height: 16px; font-size: 9px; }
+  .w-style.sel .w-chk { display: flex; }
+  .w-preview { width: 100%; height: 50px; border-radius: 6px; margin-bottom: 6px; }
+  .w-sname { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .w-sextra { font-size: 10px; color: #9ca3af; }
+  .w-badge { position: absolute; top: 46px; right: 8px; background: #e8a838; color: #1a1a2e; font-size: 7px; font-weight: 700; padding: 2px 5px; border-radius: 3px; text-transform: uppercase; }
+  .w-colour { padding: 10px; border-radius: 10px; border: 2px solid #e8e2da; background: #fff; cursor: pointer; transition: all 0.2s; text-align: center; position: relative; }
+  .w-colour:active { transform: scale(0.96); }
+  .w-colour.sel { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); }
+  .w-colour .w-chk { top: 5px; right: 5px; width: 16px; height: 16px; font-size: 9px; }
+  .w-colour.sel .w-chk { display: flex; }
+  .w-swatch { width: 100%; height: 36px; border-radius: 6px; margin-bottom: 6px; border: 1px solid rgba(0,0,0,0.06); }
+  .w-cname { font-size: 10px; font-weight: 600; color: #1a1a2e; }
+  .w-ccode { font-size: 8px; color: #9ca3af; }
+  .w-job { padding: 16px 10px; border-radius: 12px; border: 2px solid #e8e2da; background: #fff; cursor: pointer; transition: all 0.2s; text-align: center; position: relative; }
+  .w-job:active { transform: scale(0.97); }
+  .w-job.sel { border-color: #e8a838; background: linear-gradient(135deg, #fdf6ec, #fef9f1); }
+  .w-job .w-chk { top: 6px; right: 6px; width: 16px; height: 16px; font-size: 9px; }
+  .w-job.sel .w-chk { display: flex; }
+  .w-jicon { font-size: 24px; margin-bottom: 6px; }
+  .w-jname { font-size: 12px; font-weight: 600; color: #1a1a2e; }
+  .w-jdesc { font-size: 10px; color: #9ca3af; margin-top: 2px; line-height: 1.3; }
+  .w-bar { height: 5px; border-radius: 3px; background: #e8e2da; transition: all 0.3s; }
+  .w-opt.sel .w-bar { background: linear-gradient(90deg, #e8a838, #f0b84d); }
+  .w-hbar { width: 3px; background: #e0dbd4; border-radius: 2px; transition: all 0.3s; }
+  .w-opt.sel .w-hbar { background: #e8a838; }
+  .w-hvisual { display: flex; align-items: flex-end; gap: 3px; height: 36px; margin-right: 12px; }
+  .w-extra-row { display: flex; align-items: center; justify-content: space-between; }
+  .w-extra-left { display: flex; align-items: center; gap: 10px; }
+  .w-extra-icon { font-size: 18px; }
+  .w-extra-name { font-size: 13px; font-weight: 600; color: #1a1a2e; }
+  .w-extra-price { font-size: 12px; font-weight: 600; color: #9ca3af; transition: color 0.2s; }
+  .w-opt.sel .w-extra-price { color: #e8a838; }
+  .w-form-row { margin-bottom: 12px; }
+  .w-form-label { display: block; font-size: 11px; font-weight: 600; color: #1a1a2e; margin-bottom: 3px; }
+  .w-form-input {
+    width: 100%; padding: 11px 12px; border-radius: 8px; border: 2px solid #e8e2da;
     background: #fff; font-size: 14px; font-family: 'DM Sans', sans-serif; color: #1a1a2e;
     outline: none; transition: border-color 0.2s;
   }
-  .form-input:focus { border-color: #e8a838; }
-  .form-input::placeholder { color: #c4beb6; }
-  .form-row-half { display: flex; gap: 10px; }
-  .form-row-half > div { flex: 1; }
-  .form-note { font-size: 11px; color: #9ca3af; margin-top: 6px; text-align: center; }
-  
-  @keyframes slideUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+  .w-form-input:focus { border-color: #e8a838; }
+  .w-form-input::placeholder { color: #c4beb6; }
+  .w-form-note { font-size: 10px; color: #9ca3af; margin-top: 4px; text-align: center; }
+  .w-result {
+    background: linear-gradient(135deg, #1a1a2e, #2d3142);
+    border-radius: 14px; padding: 24px 20px; margin-bottom: 14px;
+    text-align: center; animation: slideUp 0.5s ease both;
   }
+  .w-rlabel { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 2px; text-transform: uppercase; margin-bottom: 4px; }
+  .w-rprice { font-size: 32px; font-weight: 700; font-family: 'Playfair Display', serif; color: #e8a838; line-height: 1.1; }
+  .w-rnote { font-size: 10px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+  .w-summary {
+    background: #fff; border-radius: 12px; padding: 16px; border: 1px solid #e8e2da;
+    margin-bottom: 14px; animation: slideUp 0.5s ease 0.1s both;
+  }
+  .w-stitle { font-size: 9px; color: #9ca3af; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 10px; }
+  .w-srow { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f5f0eb; font-size: 12px; }
+  .w-srow:last-child { border-bottom: none; }
+  .w-skey { color: #9ca3af; }
+  .w-sval { color: #1a1a2e; font-weight: 600; text-align: right; max-width: 55%; }
+  .w-cta {
+    background: linear-gradient(135deg, #fdf6ec, #fef9f1);
+    border-radius: 12px; padding: 20px; border: 2px solid #e8a838;
+    text-align: center; margin-bottom: 12px; animation: slideUp 0.5s ease 0.2s both;
+  }
+  .w-cta-title { font-size: 15px; font-weight: 700; color: #1a1a2e; margin-bottom: 4px; }
+  .w-cta-sub { font-size: 11px; color: #9ca3af; margin-bottom: 14px; line-height: 1.4; }
+  .w-cta-btns { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+  .w-btn {
+    padding: 12px 20px; border-radius: 10px; font-size: 14px; font-weight: 600;
+    font-family: 'DM Sans', sans-serif; cursor: pointer; transition: all 0.2s;
+    border: none; text-decoration: none; display: inline-flex; align-items: center;
+    justify-content: center; gap: 5px;
+  }
+  .w-btn:active { transform: scale(0.97); }
+  .w-btn-primary { background: #e8a838; color: #1a1a2e; box-shadow: 0 3px 12px rgba(232,168,56,0.25); }
+  .w-btn-primary:disabled { background: #d1ccc5; color: #9ca3af; box-shadow: none; cursor: not-allowed; }
+  .w-btn-secondary { background: transparent; color: #1a1a2e; border: 2px solid #d1ccc5; }
+  .w-btn-call { background: #e8a838; color: #1a1a2e; font-weight: 700; box-shadow: 0 3px 12px rgba(232,168,56,0.25); }
+  .w-btn-quote { background: transparent; color: #1a1a2e; border: 2px solid #d1ccc5; }
+  .w-nav { display: flex; justify-content: flex-end; margin-top: 18px; gap: 8px; }
+  .w-nav.has-back { justify-content: space-between; }
+  .w-startover { text-align: center; font-size: 11px; color: #9ca3af; cursor: pointer; text-decoration: underline; padding: 6px; }
+  .w-powered { text-align: center; margin-top: 10px; font-size: 9px; color: #c4beb6; }
+  .w-powered a { color: #9ca3af; text-decoration: none; font-weight: 600; }
+  .w-urgency { display: inline-block; background: #e8a838; color: #1a1a2e; padding: 3px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; margin-top: 8px; }
+  .w-email-sent {
+    display: flex; align-items: center; gap: 8px; padding: 10px 14px;
+    background: rgba(74,124,89,0.08); border-radius: 8px; border-left: 3px solid #4a7c59;
+    margin-bottom: 14px; animation: slideUp 0.5s ease 0.15s both;
+  }
+  .w-email-sent-icon { font-size: 16px; }
+  .w-email-sent-text { font-size: 11px; color: #4a7c59; font-weight: 600; line-height: 1.4; }
+  .w-sending { text-align: center; padding: 20px; color: #9ca3af; font-size: 13px; }
+  .w-sending-spinner {
+    width: 24px; height: 24px; border: 3px solid #e8e2da; border-top-color: #e8a838;
+    border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 10px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <div class="header-brand">Gateworld Perth</div>
-    <div class="header-title">Instant Gate Estimator</div>
-    <div class="header-line"></div>
-    <div class="header-rating"><span>★★★★★</span> 5.0 from 48 Google Reviews</div>
+<!-- ═══ SETUP BANNER ═══ -->
+<div class="setup-banner" id="setupBanner">
+  <div class="setup-title">⚙️ Quick Setup — Takes 2 minutes</div>
+  <div class="setup-text">To make the email sending work, you need a free Web3Forms access key. This tells the system where to send leads.</div>
+  <div class="setup-steps">
+    <strong>Step 1:</strong> Go to <a href="https://web3forms.com" target="_blank" style="color:#e8a838">web3forms.com</a> and enter Daryl's email address<br>
+    <strong>Step 2:</strong> They'll email you an access key (looks like a long code)<br>
+    <strong>Step 3:</strong> Paste it below and hit Save
   </div>
-  
-  <div class="card" id="mainCard">
-    <div class="steps" id="stepsIndicator"></div>
-    <div id="content"></div>
-    <div id="nav"></div>
+  <div class="setup-input-row">
+    <input class="setup-input" id="apiKeyInput" type="text" placeholder="Paste your Web3Forms access key here">
+    <button class="setup-btn" onclick="saveApiKey()">Save</button>
   </div>
-  
-  <div class="footer">Automatic sliding gates & swinging gates specialists<br>Serving all of Perth Metro</div>
-  <div class="powered-by">Powered by <a href="https://itabs.ai" target="_blank">iTabs</a></div>
+  <div class="setup-status" id="setupStatus"></div>
+</div>
+
+<!-- ═══ FAKE GATEWORLD SITE ═══ -->
+<div class="fake-site">
+  <div class="fake-nav">
+    <div class="fake-logo">Gateworld</div>
+    <div class="fake-links"><a href="#">Home</a><a href="#">Products</a><a href="#">Services</a><a href="#">Contact</a></div>
+  </div>
+  <div class="fake-hero">
+    <h1>Automatic Gates <span>from Gateworld</span></h1>
+    <p>Perth's specialists in automatic sliding gates, swinging gates, fencing and motorisation. Quality products, professional service, qualified tradespersons.</p>
+  </div>
+  <div class="fake-content">
+    <div class="fake-card"><h3>Sliding Gates</h3><p>Custom automatic sliding gates for driveways of all sizes.</p></div>
+    <div class="fake-card"><h3>Swing Gates</h3><p>Single and double swing gates with underground or arm motors.</p></div>
+    <div class="fake-card"><h3>Fencing</h3><p>Aluminium picket, slat, batten, and vertical blade fencing.</p></div>
+    <div class="fake-card"><h3>Repairs</h3><p>Gate motor replacements, repairs, and conversions across Perth.</p></div>
+  </div>
+  <div class="fake-hint">👇 Try the <span>floating quote button</span> in the bottom right corner</div>
+</div>
+
+<!-- ═══ FAB ═══ -->
+<button class="fab" id="fab" onclick="togglePopup()">
+  <div class="fab-icon" id="fabIcon">💬</div>
+  <span class="fab-text" id="fabText">Get a Quick Quote</span>
+</button>
+
+<!-- ═══ POPUP ═══ -->
+<div class="popup-overlay" id="popupOverlay" onclick="closeOverlay(event)">
+  <div class="popup" onclick="event.stopPropagation()">
+    <div class="popup-header">
+      <div class="popup-header-left">
+        <div class="popup-header-icon">⚡</div>
+        <div class="popup-header-text">
+          <h3>Gateworld Estimator</h3>
+          <span>Get a ballpark price in 60 seconds</span>
+        </div>
+      </div>
+      <button class="popup-close" onclick="togglePopup()">✕</button>
+    </div>
+    <div class="popup-body" id="popupBody">
+      <div id="wSteps"></div>
+      <div id="wContent"></div>
+      <div id="wNav"></div>
+      <div class="w-powered">Powered by <a href="https://itabs.ai" target="_blank">iTabs</a></div>
+    </div>
+  </div>
 </div>
 
 <script>
-// ─── DATA ───
-const GATE_TYPES = [
-  { id: 'sliding', name: 'Sliding Gate', icon: '⟶', desc: 'Automatic sliding driveway gates', basePrice: 3800, bg: 'linear-gradient(135deg, #2d3436 0%, #636e72 100%)' },
-  { id: 'swing_single', name: 'Single Swing Gate', icon: '⟳', desc: 'One panel, swings open', basePrice: 3200, bg: 'linear-gradient(135deg, #2d3436 0%, #4a6741 100%)' },
-  { id: 'swing_double', name: 'Double Swing Gate', icon: '⟳⟳', desc: 'Two panels, both swing open', basePrice: 4200, bg: 'linear-gradient(135deg, #2d3436 0%, #3a5a4a 100%)' },
-  { id: 'pedestrian', name: 'Pedestrian Gate', icon: '🚶', desc: 'Walk-through access gate', basePrice: 1200, bg: 'linear-gradient(135deg, #2d3436 0%, #5a4a3a 100%)' },
-];
+// ─── CONFIG ───
+let API_KEY = localStorage.getItem('gw_api_key') || '';
 
-const STYLES = [
-  { id: 'slat', name: 'Aluminium Slat', priceAdd: 0, popular: true, bg: 'repeating-linear-gradient(0deg, #3d3d3d 0px, #3d3d3d 8px, #5a5a5a 8px, #5a5a5a 12px)' },
-  { id: 'picket', name: 'Picket', priceAdd: 200, popular: false, bg: 'repeating-linear-gradient(90deg, #4a4a4a 0px, #4a4a4a 6px, transparent 6px, transparent 14px)' },
-  { id: 'batten', name: 'Batten', priceAdd: 300, popular: false, bg: 'repeating-linear-gradient(90deg, #555 0px, #555 12px, #3a3a3a 12px, #3a3a3a 14px)' },
-  { id: 'blade', name: 'Vertical Blade', priceAdd: 400, popular: false, bg: 'repeating-linear-gradient(90deg, #4a4a4a 0px, #4a4a4a 3px, transparent 3px, transparent 18px)' },
-];
-
-const COLOURS = [
-  { id: 'monument', name: 'Monument', hex: '#3b3b3b', code: 'Colorbond' },
-  { id: 'surfmist', name: 'Surfmist', hex: '#e8e4dc', code: 'Colorbond' },
-  { id: 'woodland', name: 'Woodland Grey', hex: '#5c5c50', code: 'Colorbond' },
-  { id: 'satin_black', name: 'Satin Black', hex: '#1a1a1a', code: 'Powder Coat' },
-  { id: 'primrose', name: 'Primrose', hex: '#f0e8c8', code: 'Colorbond' },
-  { id: 'basalt', name: 'Basalt', hex: '#6b6b60', code: 'Colorbond' },
-  { id: 'pale_eucalypt', name: 'Pale Eucalypt', hex: '#6b7c5e', code: 'Colorbond' },
-  { id: 'ironstone', name: 'Ironstone', hex: '#44403c', code: 'Colorbond' },
-  { id: 'custom', name: 'Custom RAL', hex: 'linear-gradient(135deg, #e8a838, #e86838, #6838e8, #38a8e8)', code: '+$200', isGradient: true },
-];
-
-const HEIGHTS = [
-  { id: '1200', label: '1200mm', desc: 'Standard low fence', multiplier: 0.9, barH: [16, 20, 24] },
-  { id: '1500', label: '1500mm', desc: 'Most popular for front yards', multiplier: 1.0, barH: [20, 26, 32], popular: true },
-  { id: '1800', label: '1800mm', desc: 'Full privacy height', multiplier: 1.15, barH: [26, 34, 42] },
-  { id: '2100', label: '2100mm', desc: 'Maximum height', multiplier: 1.35, barH: [30, 38, 44] },
-];
-
-const WIDTHS = [
-  { id: '3m', label: 'Up to 3m', multiplier: 1.0, barWidth: '30%' },
-  { id: '4m', label: '3m – 4m', multiplier: 1.15, barWidth: '50%' },
-  { id: '5m', label: '4m – 5m', multiplier: 1.3, barWidth: '70%' },
-  { id: '6m', label: '5m – 6m+', multiplier: 1.5, barWidth: '90%' },
-];
-
-const JOB_TYPES = [
-  { id: 'new', name: 'Brand New Install', icon: '🏗️', desc: 'No existing gate or tracks' },
-  { id: 'replace_gate', name: 'Replace Gate', icon: '🔄', desc: 'New gate on existing tracks/posts' },
-  { id: 'replace_motor', name: 'Replace Motor Only', icon: '⚡', desc: 'Keep gate, new motor', priceOverride: 1200 },
-  { id: 'add_motor', name: 'Automate Existing Gate', icon: '🤖', desc: 'Add motor to manual gate', priceOverride: 1400 },
-];
-
-const PROPERTY_TYPES = [
-  { id: 'residential', name: 'Residential', icon: '🏠', desc: 'House or townhouse' },
-  { id: 'commercial', name: 'Commercial', icon: '🏢', desc: 'Business, warehouse, industrial' },
-  { id: 'strata', name: 'Strata / Body Corp', icon: '🏘️', desc: 'Shared property or complex' },
-];
-
-const TIMEFRAMES = [
-  { id: 'asap', name: 'ASAP', icon: '🔥', desc: 'Within 2 weeks' },
-  { id: 'month', name: 'This Month', icon: '📅', desc: 'Within 4 weeks' },
-  { id: 'planning', name: 'Just Planning', icon: '💭', desc: 'Next few months' },
-  { id: 'quoting', name: 'Getting Quotes', icon: '📝', desc: 'Comparing options' },
-];
-
-const EXTRAS = [
-  { id: 'motor', name: 'Gate Motor', price: 800, icon: '⚡' },
-  { id: 'intercom', name: 'Intercom System', price: 600, icon: '📞' },
-  { id: 'keypad', name: 'Keypad Access', price: 350, icon: '🔢' },
-  { id: 'remote', name: 'Extra Remotes (×2)', price: 120, icon: '📡' },
-  { id: 'safety_beam', name: 'Safety Beam Sensors', price: 250, icon: '🔴' },
-  { id: 'ped_gate', name: 'Matching Pedestrian Gate', price: 1200, icon: '🚶' },
-];
-
-const SLOPE_OPTIONS = [
-  { id: 'flat', name: 'Flat Driveway', icon: '➖', desc: 'Level ground', priceAdd: 0 },
-  { id: 'slight', name: 'Slight Slope', icon: '⟋', desc: 'Gentle incline', priceAdd: 300 },
-  { id: 'steep', name: 'Steep Slope', icon: '⟋⟋', desc: 'Noticeable hill', priceAdd: 600 },
-  { id: 'unsure', name: 'Not Sure', icon: '❓', desc: "We'll check on site", priceAdd: 0 },
-];
-
-// Total steps: 0=gate, 1=style, 2=colour, 3=height, 4=width, 5=slope, 6=job type, 7=property, 8=timeframe, 9=extras, 10=contact, 11=result
-const TOTAL_SELECTION_STEPS = 10;
-
-// ─── STATE ───
-let state = {
-  step: 0,
-  gateType: null,
-  style: null,
-  colour: null,
-  height: null,
-  width: null,
-  slope: null,
-  jobType: null,
-  propertyType: null,
-  timeframe: null,
-  extras: [],
-  contact: { name: '', phone: '', email: '', suburb: '' },
-};
-
-// ─── RENDER ENGINE ───
-function render() {
-  const content = document.getElementById('content');
-  const nav = document.getElementById('nav');
-  const steps = document.getElementById('stepsIndicator');
-  
-  // Steps indicator
-  if (state.step <= TOTAL_SELECTION_STEPS) {
-    let html = '';
-    for (let i = 0; i < TOTAL_SELECTION_STEPS; i++) {
-      let cls = 'step-dot';
-      if (i < state.step) cls += ' done';
-      if (i === state.step) cls += ' active';
-      html += `<div class="${cls}"></div>`;
-    }
-    html += `<span class="step-label">${state.step + 1}/${TOTAL_SELECTION_STEPS}</span>`;
-    steps.innerHTML = html;
-    steps.style.display = 'flex';
-  } else {
-    steps.style.display = 'none';
+function saveApiKey() {
+  const key = document.getElementById('apiKeyInput').value.trim();
+  if (!key) {
+    document.getElementById('setupStatus').innerHTML = '<span class="setup-err">Please paste your access key</span>';
+    return;
   }
+  API_KEY = key;
+  localStorage.setItem('gw_api_key', key);
+  document.getElementById('setupStatus').innerHTML = '<span class="setup-ok">✅ Saved! The widget will now send real emails. Try it out!</span>';
+}
+
+// Check if key already saved
+if (API_KEY) {
+  document.getElementById('apiKeyInput').value = API_KEY;
+  document.getElementById('setupStatus').innerHTML = '<span class="setup-ok">✅ Key saved — emails are active</span>';
+}
+
+// ─── DATA ───
+const GATES=[
+  {id:'sliding',name:'Sliding Gate',icon:'⟶',desc:'Automatic sliding driveway',base:3800,bg:'linear-gradient(135deg,#2d3436,#636e72)'},
+  {id:'swing_s',name:'Single Swing',icon:'⟳',desc:'One panel swings open',base:3200,bg:'linear-gradient(135deg,#2d3436,#4a6741)'},
+  {id:'swing_d',name:'Double Swing',icon:'⟳⟳',desc:'Two panels swing open',base:4200,bg:'linear-gradient(135deg,#2d3436,#3a5a4a)'},
+  {id:'ped',name:'Pedestrian Gate',icon:'🚶',desc:'Walk-through access',base:1200,bg:'linear-gradient(135deg,#2d3436,#5a4a3a)'},
+];
+const STYLES=[
+  {id:'slat',name:'Aluminium Slat',add:0,pop:true,bg:'repeating-linear-gradient(0deg,#3d3d3d 0px,#3d3d3d 8px,#5a5a5a 8px,#5a5a5a 12px)'},
+  {id:'picket',name:'Picket',add:200,bg:'repeating-linear-gradient(90deg,#4a4a4a 0px,#4a4a4a 6px,transparent 6px,transparent 14px)'},
+  {id:'batten',name:'Batten',add:300,bg:'repeating-linear-gradient(90deg,#555 0px,#555 12px,#3a3a3a 12px,#3a3a3a 14px)'},
+  {id:'blade',name:'Vert. Blade',add:400,bg:'repeating-linear-gradient(90deg,#4a4a4a 0px,#4a4a4a 3px,transparent 3px,transparent 18px)'},
+];
+const COLOURS=[
+  {id:'monument',name:'Monument',hex:'#3b3b3b',code:'Colorbond'},
+  {id:'surfmist',name:'Surfmist',hex:'#e8e4dc',code:'Colorbond'},
+  {id:'woodland',name:'Woodland Grey',hex:'#5c5c50',code:'Colorbond'},
+  {id:'satin_black',name:'Satin Black',hex:'#1a1a1a',code:'Powder Coat'},
+  {id:'primrose',name:'Primrose',hex:'#f0e8c8',code:'Colorbond'},
+  {id:'basalt',name:'Basalt',hex:'#6b6b60',code:'Colorbond'},
+  {id:'eucalypt',name:'Pale Eucalypt',hex:'#6b7c5e',code:'Colorbond'},
+  {id:'ironstone',name:'Ironstone',hex:'#44403c',code:'Colorbond'},
+  {id:'custom',name:'Custom RAL',hex:'linear-gradient(135deg,#e8a838,#e86838,#6838e8,#38a8e8)',code:'+$200',grad:true},
+];
+const HEIGHTS=[
+  {id:'1200',label:'1200mm',desc:'Standard low',mult:0.9,bars:[14,18,22]},
+  {id:'1500',label:'1500mm',desc:'Most popular',mult:1.0,bars:[18,24,30],pop:true},
+  {id:'1800',label:'1800mm',desc:'Full privacy',mult:1.15,bars:[24,32,38]},
+  {id:'2100',label:'2100mm',desc:'Maximum',mult:1.35,bars:[28,36,42]},
+];
+const WIDTHS=[
+  {id:'3m',label:'Up to 3m',mult:1.0,bar:'30%'},
+  {id:'4m',label:'3m – 4m',mult:1.15,bar:'50%'},
+  {id:'5m',label:'4m – 5m',mult:1.3,bar:'70%'},
+  {id:'6m',label:'5m – 6m+',mult:1.5,bar:'90%'},
+];
+const SLOPES=[
+  {id:'flat',name:'Flat',icon:'➖',desc:'Level ground',add:0},
+  {id:'slight',name:'Slight Slope',icon:'⟋',desc:'Gentle incline',add:300},
+  {id:'steep',name:'Steep Slope',icon:'⟋⟋',desc:'Noticeable hill',add:600},
+  {id:'unsure',name:'Not Sure',icon:'❓',desc:"We'll check",add:0},
+];
+const JOBS=[
+  {id:'new',name:'Brand New',icon:'🏗️',desc:'No existing gate'},
+  {id:'replace',name:'Replace Gate',icon:'🔄',desc:'New gate, existing setup'},
+  {id:'motor',name:'Motor Only',icon:'⚡',desc:'New motor for gate',over:1200},
+  {id:'automate',name:'Automate',icon:'🤖',desc:'Add motor to manual',over:1400},
+];
+const PROPS=[
+  {id:'res',name:'Residential',icon:'🏠'},
+  {id:'comm',name:'Commercial',icon:'🏢'},
+  {id:'strata',name:'Strata',icon:'🏘️'},
+];
+const TIMES=[
+  {id:'asap',name:'ASAP',icon:'🔥',desc:'Within 2 weeks'},
+  {id:'month',name:'This Month',icon:'📅',desc:'Within 4 weeks'},
+  {id:'plan',name:'Planning',icon:'💭',desc:'Few months out'},
+  {id:'quote',name:'Getting Quotes',icon:'📝',desc:'Comparing options'},
+];
+const EXTRAS=[
+  {id:'motor_e',name:'Gate Motor',price:800,icon:'⚡'},
+  {id:'intercom',name:'Intercom',price:600,icon:'📞'},
+  {id:'keypad',name:'Keypad',price:350,icon:'🔢'},
+  {id:'remote',name:'Extra Remotes',price:120,icon:'📡'},
+  {id:'beam',name:'Safety Beams',price:250,icon:'🔴'},
+  {id:'ped_e',name:'Matching Ped Gate',price:1200,icon:'🚶'},
+];
+
+const NS=10;
+let S={step:0,gate:null,style:null,colour:null,height:null,width:null,slope:null,job:null,prop:null,time:null,extras:[],contact:{name:'',phone:'',email:'',suburb:''}};
+let isOpen=false;
+let emailSent=false;
+
+function togglePopup(){
+  isOpen=!isOpen;
+  const ov=document.getElementById('popupOverlay'),fab=document.getElementById('fab');
+  if(isOpen){ov.classList.add('visible');fab.classList.add('open');document.getElementById('fabIcon').textContent='✕';document.getElementById('fabText').textContent='Close';renderWidget();}
+  else{ov.classList.remove('visible');fab.classList.remove('open');document.getElementById('fabIcon').textContent='💬';document.getElementById('fabText').textContent='Get a Quick Quote';}
+}
+function closeOverlay(e){if(e.target===document.getElementById('popupOverlay'))togglePopup();}
+
+function calcPrice(){
+  const gate=GATES.find(g=>g.id===S.gate),style=STYLES.find(s=>s.id===S.style);
+  const height=HEIGHTS.find(h=>h.id===S.height),width=WIDTHS.find(w=>w.id===S.width);
+  const slope=SLOPES.find(s=>s.id===S.slope),job=JOBS.find(j=>j.id===S.job);
+  const exData=S.extras.map(id=>EXTRAS.find(e=>e.id===id));
+  let tot=job.over||Math.round((gate.base+style.add)*height.mult*width.mult);
+  tot+=slope.add;
+  if(S.colour==='custom')tot+=200;
+  if(S.prop==='comm')tot=Math.round(tot*1.2);
+  tot+=exData.reduce((s,e)=>s+e.price,0);
+  return{low:Math.round(tot*0.9),high:Math.round(tot*1.15)};
+}
+
+// ─── EMAIL SENDING ───
+async function sendLeadEmail(){
+  if(!API_KEY){console.log('No API key — skipping email');return false;}
   
-  const renderers = [
-    renderGateType, renderStyle, renderColour, renderHeight, renderWidth,
-    renderSlope, renderJobType, renderPropertyType, renderTimeframe,
-    renderExtras, renderContact, renderResult
-  ];
-  renderers[state.step](content);
-  
-  // Nav
-  if (state.step < 11) {
-    const canProceed = getCanProceed();
-    const hasBack = state.step > 0;
-    const label = state.step === 10 ? 'See My Estimate →' : state.step === 9 ? 'Continue →' : 'Continue →';
-    nav.innerHTML = `
-      <div class="nav-row ${hasBack ? 'has-back' : ''}">
-        ${hasBack ? `<button class="btn btn-secondary" onclick="goBack()">← Back</button>` : ''}
-        <button class="btn btn-primary" onclick="goNext()" ${!canProceed ? 'disabled' : ''}>${label}</button>
-      </div>
-    `;
-  } else {
-    nav.innerHTML = '';
+  const gate=GATES.find(g=>g.id===S.gate),style=STYLES.find(s=>s.id===S.style);
+  const colour=COLOURS.find(c=>c.id===S.colour),height=HEIGHTS.find(h=>h.id===S.height);
+  const width=WIDTHS.find(w=>w.id===S.width),slope=SLOPES.find(s=>s.id===S.slope);
+  const job=JOBS.find(j=>j.id===S.job),prop=PROPS.find(p=>p.id===S.prop);
+  const time=TIMES.find(t=>t.id===S.time);
+  const exData=S.extras.map(id=>EXTRAS.find(e=>e.id===id));
+  const price=calcPrice();
+  const exStr=exData.length?exData.map(e=>`${e.icon} ${e.name} (+$${e.price})`).join(', '):'None';
+  const urgent=S.time==='asap';
+  const now=new Date();
+  const dateStr=now.toLocaleDateString('en-AU',{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+  const timeStr=now.toLocaleTimeString('en-AU',{hour:'numeric',minute:'2-digit'});
+
+  const emailBody = `
+═══════════════════════════════════
+🔔 NEW QUOTE REQUEST — GATEWORLD
+═══════════════════════════════════
+${urgent?'🔥 PRIORITY: Customer wants it ASAP (within 2 weeks)\n':''}
+📅 ${dateStr} at ${timeStr}
+
+━━━ CUSTOMER ━━━━━━━━━━━━━━━━━━━━
+👤 ${S.contact.name}
+📞 ${S.contact.phone}
+${S.contact.email?'✉️ '+S.contact.email:''}
+${S.contact.suburb?'📍 '+S.contact.suburb+', WA':''}
+
+━━━ ESTIMATE SHOWN ━━━━━━━━━━━━━━
+💰 $${price.low.toLocaleString()} – $${price.high.toLocaleString()}
+   (supply, fabrication & installation)
+
+━━━ WHAT THEY WANT ━━━━━━━━━━━━━━
+Gate Type:    ${gate.name}
+Style:        ${style.name}
+Colour:       ${colour.name}
+Height:       ${height.label}
+Width:        ${width.label}
+Driveway:     ${slope.name}${slope.add>0?' (+$'+slope.add+')':''}
+Job Type:     ${job.name}
+Property:     ${prop.name}
+Timeframe:    ${time.icon} ${time.name} — ${time.desc}
+
+━━━ EXTRAS ━━━━━━━━━━━━━━━━━━━━━━
+${exStr}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Powered by iTabs — itabs.ai
+  `.trim();
+
+  try{
+    const resp=await fetch('https://api.web3forms.com/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        access_key:API_KEY,
+        subject:`🔔 New Quote: ${gate.name} — ${S.contact.name}${urgent?' [ASAP]':''}`,
+        from_name:'Gateworld Quote Estimator',
+        name:S.contact.name,
+        phone:S.contact.phone,
+        email:S.contact.email||'not provided',
+        suburb:S.contact.suburb||'not provided',
+        gate_type:gate.name,
+        style:style.name,
+        colour:colour.name,
+        height:height.label,
+        width:width.label,
+        slope:slope.name,
+        job_type:job.name,
+        property:prop.name,
+        timeframe:`${time.name} — ${time.desc}`,
+        extras:exStr,
+        estimate:`$${price.low.toLocaleString()} – $${price.high.toLocaleString()}`,
+        priority:urgent?'ASAP':'Normal',
+        message:emailBody,
+      })
+    });
+    const data=await resp.json();
+    return data.success;
+  }catch(err){
+    console.error('Email send failed:',err);
+    return false;
   }
 }
 
-function getCanProceed() {
-  switch (state.step) {
-    case 0: return !!state.gateType;
-    case 1: return !!state.style;
-    case 2: return !!state.colour;
-    case 3: return !!state.height;
-    case 4: return !!state.width;
-    case 5: return !!state.slope;
-    case 6: return !!state.jobType;
-    case 7: return !!state.propertyType;
-    case 8: return !!state.timeframe;
-    case 9: return true; // extras optional
-    case 10: return state.contact.name && state.contact.phone;
-    default: return false;
+// ─── RENDER ───
+function renderWidget(){
+  const wS=document.getElementById('wSteps'),wC=document.getElementById('wContent'),wN=document.getElementById('wNav');
+  
+  if(S.step<NS){
+    let h='';
+    for(let i=0;i<NS;i++)h+=`<div class="w-dot${i<S.step?' done':''}${i===S.step?' active':''}"></div>`;
+    h+=`<span class="w-step-label">${S.step+1}/${NS}</span>`;
+    wS.innerHTML=h;wS.style.display='flex';
+  }else{wS.style.display='none';}
+  
+  [rGate,rStyle,rColour,rHeight,rWidth,rSlope,rJob,rProp,rTime,rExtras,rContact,rResult][S.step](wC);
+  
+  if(S.step<11){
+    const ok=canProceed();
+    const back=S.step>0;
+    const lbl=S.step===10?'See Estimate →':'Continue →';
+    wN.innerHTML=`<div class="w-nav${back?' has-back':''}">
+      ${back?'<button class="w-btn w-btn-secondary" onclick="wBack()">← Back</button>':''}
+      <button class="w-btn w-btn-primary" onclick="wNext()" ${!ok?'disabled':''}>${lbl}</button></div>`;
+  }else{wN.innerHTML='';}
+  
+  document.getElementById('popupBody').scrollTop=0;
+}
+
+function canProceed(){
+  return[()=>S.gate,()=>S.style,()=>S.colour,()=>S.height,()=>S.width,()=>S.slope,()=>S.job,()=>S.prop,()=>S.time,()=>true,()=>S.contact.name&&S.contact.phone][S.step]();
+}
+
+function sel(k,v){S[k]=v;renderWidget();}
+function togEx(id){S.extras=S.extras.includes(id)?S.extras.filter(e=>e!==id):[...S.extras,id];renderWidget();}
+
+async function wNext(){
+  if(S.step===10){
+    // Show sending state
+    const wC=document.getElementById('wContent');
+    const wN=document.getElementById('wNav');
+    wC.innerHTML='<div class="w-sending"><div class="w-sending-spinner"></div>Calculating your estimate...</div>';
+    wN.innerHTML='';
+    
+    // Send email
+    emailSent=await sendLeadEmail();
+    
+    S.step++;
+    renderWidget();
+  }else{
+    S.step++;
+    renderWidget();
   }
+}
+
+function wBack(){S.step--;renderWidget();}
+function wReset(){S={step:0,gate:null,style:null,colour:null,height:null,width:null,slope:null,job:null,prop:null,time:null,extras:[],contact:{name:'',phone:'',email:'',suburb:''}};emailSent=false;renderWidget();}
+function uCon(f,v){
+  S.contact[f]=v;
+  const ok=S.contact.name&&S.contact.phone;
+  document.getElementById('wNav').innerHTML=`<div class="w-nav has-back">
+    <button class="w-btn w-btn-secondary" onclick="wBack()">← Back</button>
+    <button class="w-btn w-btn-primary" onclick="wNext()" ${!ok?'disabled':''}>See Estimate →</button></div>`;
 }
 
 // ─── STEP RENDERERS ───
-
-function renderGateType(el) {
-  let html = `<div class="section-title">What type of gate?</div>
-    <div class="section-subtitle">Select the gate style for your property.</div>`;
-  GATE_TYPES.forEach(g => {
-    html += `<div class="option ${state.gateType === g.id ? 'selected' : ''}" onclick="select('gateType','${g.id}')">
-      <div class="option-check">✓</div>
-      <div class="option-row">
-        <div class="option-icon" style="background: ${g.bg}">${g.icon}</div>
-        <div><div class="option-name">${g.name}</div><div class="option-desc">${g.desc}</div>
-        <div class="option-price">From $${g.basePrice.toLocaleString()}</div></div>
-      </div></div>`;
-  });
-  el.innerHTML = html;
+function rGate(el){
+  el.innerHTML=`<div class="w-title">What type of gate?</div><div class="w-subtitle">Select the style for your property.</div>`+
+  GATES.map(g=>`<div class="w-opt${S.gate===g.id?' sel':''}" onclick="sel('gate','${g.id}')">
+    <div class="w-chk">✓</div><div class="w-row">
+    <div class="w-icon" style="background:${g.bg}">${g.icon}</div>
+    <div><div class="w-name">${g.name}</div><div class="w-desc">${g.desc}</div>
+    <div class="w-price">From $${g.base.toLocaleString()}</div></div></div></div>`).join('');
 }
-
-function renderStyle(el) {
-  let html = `<div class="section-title">Choose your style</div>
-    <div class="section-subtitle">All available in a range of powder coat colours.</div><div class="style-grid">`;
-  STYLES.forEach(s => {
-    html += `<div class="style-option ${state.style === s.id ? 'selected' : ''}" onclick="select('style','${s.id}')">
-      <div class="option-check">✓</div>
-      <div class="style-preview" style="background: ${s.bg}"></div>
-      ${s.popular ? '<div class="style-badge">Popular</div>' : ''}
-      <div class="style-name">${s.name}</div>
-      <div class="style-extra">${s.priceAdd > 0 ? '+$' + s.priceAdd : 'Base price'}</div></div>`;
-  });
-  html += '</div>';
-  el.innerHTML = html;
+function rStyle(el){
+  el.innerHTML=`<div class="w-title">Choose your style</div><div class="w-subtitle">All in a range of powder coat colours.</div><div class="w-grid2">`+
+  STYLES.map(s=>`<div class="w-style${S.style===s.id?' sel':''}" onclick="sel('style','${s.id}')">
+    <div class="w-chk">✓</div><div class="w-preview" style="background:${s.bg}"></div>
+    ${s.pop?'<div class="w-badge">Popular</div>':''}
+    <div class="w-sname">${s.name}</div><div class="w-sextra">${s.add>0?'+$'+s.add:'Base price'}</div></div>`).join('')+'</div>';
 }
-
-function renderColour(el) {
-  let html = `<div class="section-title">Pick your colour</div>
-    <div class="section-subtitle">Standard Colorbond & powder coat colours.</div><div class="colour-grid">`;
-  COLOURS.forEach(c => {
-    const bg = c.isGradient ? c.hex : c.hex;
-    html += `<div class="colour-option ${state.colour === c.id ? 'selected' : ''}" onclick="select('colour','${c.id}')">
-      <div class="option-check">✓</div>
-      <div class="colour-swatch" style="background: ${bg}"></div>
-      <div class="colour-name">${c.name}</div>
-      <div class="colour-code">${c.code}</div></div>`;
-  });
-  html += '</div>';
-  el.innerHTML = html;
+function rColour(el){
+  el.innerHTML=`<div class="w-title">Pick your colour</div><div class="w-subtitle">Standard Colorbond & powder coat options.</div><div class="w-grid3">`+
+  COLOURS.map(c=>`<div class="w-colour${S.colour===c.id?' sel':''}" onclick="sel('colour','${c.id}')">
+    <div class="w-chk">✓</div><div class="w-swatch" style="background:${c.hex}"></div>
+    <div class="w-cname">${c.name}</div><div class="w-ccode">${c.code}</div></div>`).join('')+'</div>';
 }
-
-function renderHeight(el) {
-  let html = `<div class="section-title">What height?</div>
-    <div class="section-subtitle">Measured from ground to top of gate.</div>`;
-  HEIGHTS.forEach(h => {
-    html += `<div class="option ${state.height === h.id ? 'selected' : ''}" onclick="select('height','${h.id}')">
-      <div class="option-check">✓</div>
-      <div class="height-row">
-        <div style="display:flex;align-items:center;gap:14px">
-          <div class="height-visual">${h.barH.map(b => `<div class="height-bar" style="height:${b}px"></div>`).join('')}</div>
-          <div><div class="height-label">${h.label}${h.popular ? ' <span style="color:#e8a838;font-size:11px">★ Popular</span>' : ''}</div>
-          <div class="height-desc">${h.desc}</div></div>
-        </div>
-      </div></div>`;
-  });
-  el.innerHTML = html;
+function rHeight(el){
+  el.innerHTML=`<div class="w-title">What height?</div><div class="w-subtitle">Ground to top of gate.</div>`+
+  HEIGHTS.map(h=>`<div class="w-opt${S.height===h.id?' sel':''}" onclick="sel('height','${h.id}')">
+    <div class="w-chk">✓</div><div class="w-row">
+    <div class="w-hvisual">${h.bars.map(b=>`<div class="w-hbar" style="height:${b}px"></div>`).join('')}</div>
+    <div><div class="w-name">${h.label}${h.pop?' <span style="color:#e8a838;font-size:10px">★ Popular</span>':''}</div>
+    <div class="w-desc">${h.desc}</div></div></div></div>`).join('');
 }
-
-function renderWidth(el) {
-  let html = `<div class="section-title">Opening width?</div>
-    <div class="section-subtitle">Measure your driveway or gate opening.</div>`;
-  WIDTHS.forEach(w => {
-    html += `<div class="option ${state.width === w.id ? 'selected' : ''}" onclick="select('width','${w.id}')">
-      <div class="option-check">✓</div>
-      <div class="width-row"><div class="width-label">${w.label}</div>
-      <div class="width-bar" style="width:${w.barWidth};flex-shrink:0"></div></div></div>`;
-  });
-  el.innerHTML = html;
+function rWidth(el){
+  el.innerHTML=`<div class="w-title">Opening width?</div><div class="w-subtitle">Measure your driveway opening.</div>`+
+  WIDTHS.map(w=>`<div class="w-opt${S.width===w.id?' sel':''}" onclick="sel('width','${w.id}')">
+    <div class="w-chk">✓</div><div style="display:flex;align-items:center;justify-content:space-between;gap:14px">
+    <div class="w-name">${w.label}</div><div class="w-bar" style="width:${w.bar};flex-shrink:0"></div></div></div>`).join('');
 }
-
-function renderSlope(el) {
-  let html = `<div class="section-title">Is your driveway sloped?</div>
-    <div class="section-subtitle">Slopes can affect gate type and installation.</div>`;
-  SLOPE_OPTIONS.forEach(s => {
-    html += `<div class="option ${state.slope === s.id ? 'selected' : ''}" onclick="select('slope','${s.id}')">
-      <div class="option-check">✓</div>
-      <div class="option-row">
-        <div class="option-icon" style="background:#f0ebe4;font-size:20px">${s.icon}</div>
-        <div><div class="option-name">${s.name}</div><div class="option-desc">${s.desc}</div>
-        ${s.priceAdd > 0 ? `<div class="option-price">+$${s.priceAdd}</div>` : ''}</div>
-      </div></div>`;
-  });
-  el.innerHTML = html;
+function rSlope(el){
+  el.innerHTML=`<div class="w-title">Driveway slope?</div><div class="w-subtitle">Slopes affect install complexity.</div>`+
+  SLOPES.map(s=>`<div class="w-opt${S.slope===s.id?' sel':''}" onclick="sel('slope','${s.id}')">
+    <div class="w-chk">✓</div><div class="w-row">
+    <div class="w-icon" style="background:#f0ebe4;font-size:18px">${s.icon}</div>
+    <div><div class="w-name">${s.name}</div><div class="w-desc">${s.desc}</div>
+    ${s.add>0?`<div class="w-price">+$${s.add}</div>`:''}</div></div></div>`).join('');
 }
-
-function renderJobType(el) {
-  let html = `<div class="section-title">New or replacement?</div>
-    <div class="section-subtitle">This helps us give you a more accurate estimate.</div><div class="job-grid">`;
-  JOB_TYPES.forEach(j => {
-    html += `<div class="job-option ${state.jobType === j.id ? 'selected' : ''}" onclick="select('jobType','${j.id}')">
-      <div class="option-check">✓</div>
-      <div class="job-icon">${j.icon}</div>
-      <div class="job-name">${j.name}</div>
-      <div class="job-desc">${j.desc}</div></div>`;
-  });
-  html += '</div>';
-  el.innerHTML = html;
+function rJob(el){
+  el.innerHTML=`<div class="w-title">New or replacement?</div><div class="w-subtitle">Helps us estimate accurately.</div><div class="w-grid2">`+
+  JOBS.map(j=>`<div class="w-job${S.job===j.id?' sel':''}" onclick="sel('job','${j.id}')">
+    <div class="w-chk">✓</div><div class="w-jicon">${j.icon}</div>
+    <div class="w-jname">${j.name}</div><div class="w-jdesc">${j.desc}</div></div>`).join('')+'</div>';
 }
-
-function renderPropertyType(el) {
-  let html = `<div class="section-title">Property type?</div>
-    <div class="section-subtitle">Helps us plan for access and any approvals needed.</div>`;
-  PROPERTY_TYPES.forEach(p => {
-    html += `<div class="option ${state.propertyType === p.id ? 'selected' : ''}" onclick="select('propertyType','${p.id}')">
-      <div class="option-check">✓</div>
-      <div class="option-row">
-        <div class="option-icon" style="background:#f0ebe4;font-size:22px">${p.icon}</div>
-        <div><div class="option-name">${p.name}</div><div class="option-desc">${p.desc}</div></div>
-      </div></div>`;
-  });
-  el.innerHTML = html;
+function rProp(el){
+  el.innerHTML=`<div class="w-title">Property type?</div><div class="w-subtitle">Helps plan access and approvals.</div>`+
+  PROPS.map(p=>`<div class="w-opt${S.prop===p.id?' sel':''}" onclick="sel('prop','${p.id}')">
+    <div class="w-chk">✓</div><div class="w-row">
+    <div class="w-icon" style="background:#f0ebe4;font-size:20px">${p.icon}</div>
+    <div class="w-name">${p.name}</div></div></div>`).join('');
 }
-
-function renderTimeframe(el) {
-  let html = `<div class="section-title">When do you need it?</div>
-    <div class="section-subtitle">No rush — just helps Daryl plan his schedule.</div>`;
-  TIMEFRAMES.forEach(t => {
-    html += `<div class="option ${state.timeframe === t.id ? 'selected' : ''}" onclick="select('timeframe','${t.id}')">
-      <div class="option-check">✓</div>
-      <div class="option-row">
-        <div class="option-icon" style="background:#f0ebe4;font-size:22px">${t.icon}</div>
-        <div><div class="option-name">${t.name}</div><div class="option-desc">${t.desc}</div></div>
-      </div></div>`;
-  });
-  el.innerHTML = html;
+function rTime(el){
+  el.innerHTML=`<div class="w-title">When do you need it?</div><div class="w-subtitle">Helps Daryl plan his schedule.</div><div class="w-grid2">`+
+  TIMES.map(t=>`<div class="w-job${S.time===t.id?' sel':''}" onclick="sel('time','${t.id}')">
+    <div class="w-chk">✓</div><div class="w-jicon">${t.icon}</div>
+    <div class="w-jname">${t.name}</div><div class="w-jdesc">${t.desc}</div></div>`).join('')+'</div>';
 }
-
-function renderExtras(el) {
-  let html = `<div class="section-title">Any extras?</div>
-    <div class="section-subtitle">Optional add-ons. Skip if you're not sure.</div>`;
-  
-  // Filter out motor if job type is replace_motor or add_motor
-  // Filter out ped gate if selecting pedestrian gate
-  const filtered = EXTRAS.filter(e => {
-    if ((state.jobType === 'replace_motor' || state.jobType === 'add_motor') && e.id === 'motor') return false;
-    if (state.gateType === 'pedestrian' && e.id === 'ped_gate') return false;
+function rExtras(el){
+  const filt=EXTRAS.filter(e=>{
+    if((S.job==='motor'||S.job==='automate')&&e.id==='motor_e')return false;
+    if(S.gate==='ped'&&e.id==='ped_e')return false;
     return true;
   });
-  
-  filtered.forEach(e => {
-    const sel = state.extras.includes(e.id);
-    html += `<div class="option ${sel ? 'selected' : ''}" onclick="toggleExtra('${e.id}')">
-      <div class="option-check">✓</div>
-      <div class="extra-row"><div class="extra-left">
-        <span class="extra-icon">${e.icon}</span><span class="extra-name">${e.name}</span></div>
-        <span class="extra-price">+$${e.price}</span></div></div>`;
-  });
-  el.innerHTML = html;
+  el.innerHTML=`<div class="w-title">Any extras?</div><div class="w-subtitle">Optional. Skip if not sure.</div>`+
+  filt.map(e=>`<div class="w-opt${S.extras.includes(e.id)?' sel':''}" onclick="togEx('${e.id}')">
+    <div class="w-chk">✓</div><div class="w-extra-row"><div class="w-extra-left">
+    <span class="w-extra-icon">${e.icon}</span><span class="w-extra-name">${e.name}</span></div>
+    <span class="w-extra-price">+$${e.price}</span></div></div>`).join('');
 }
-
-function renderContact(el) {
-  el.innerHTML = `
-    <div class="section-title">Almost there!</div>
-    <div class="section-subtitle">Your details so Daryl can get back to you with an exact quote.</div>
-    <div class="form-row">
-      <label class="form-label">Your Name <span style="color:#e8a838">*</span></label>
-      <input class="form-input" type="text" placeholder="e.g. John Smith" value="${state.contact.name}" oninput="updateContact('name', this.value)">
-    </div>
-    <div class="form-row">
-      <label class="form-label">Phone <span style="color:#e8a838">*</span></label>
-      <input class="form-input" type="tel" placeholder="e.g. 0412 345 678" value="${state.contact.phone}" oninput="updateContact('phone', this.value)">
-    </div>
-    <div class="form-row">
-      <label class="form-label">Email</label>
-      <input class="form-input" type="email" placeholder="e.g. john@email.com" value="${state.contact.email}" oninput="updateContact('email', this.value)">
-    </div>
-    <div class="form-row">
-      <label class="form-label">Suburb</label>
-      <input class="form-input" type="text" placeholder="e.g. Scarborough" value="${state.contact.suburb}" oninput="updateContact('suburb', this.value)">
-    </div>
-    <div class="form-note">Your info goes directly to Daryl at Gateworld. No spam, no third parties.</div>
-  `;
+function rContact(el){
+  el.innerHTML=`<div class="w-title">Almost there!</div><div class="w-subtitle">Details for Daryl to get back to you.</div>
+    <div class="w-form-row"><label class="w-form-label">Your Name <span style="color:#e8a838">*</span></label>
+    <input class="w-form-input" placeholder="e.g. John Smith" value="${S.contact.name}" oninput="uCon('name',this.value)"></div>
+    <div class="w-form-row"><label class="w-form-label">Phone <span style="color:#e8a838">*</span></label>
+    <input class="w-form-input" type="tel" placeholder="e.g. 0412 345 678" value="${S.contact.phone}" oninput="uCon('phone',this.value)"></div>
+    <div class="w-form-row"><label class="w-form-label">Email</label>
+    <input class="w-form-input" type="email" placeholder="e.g. john@email.com" value="${S.contact.email}" oninput="uCon('email',this.value)"></div>
+    <div class="w-form-row"><label class="w-form-label">Suburb</label>
+    <input class="w-form-input" placeholder="e.g. Scarborough" value="${S.contact.suburb}" oninput="uCon('suburb',this.value)"></div>
+    <div class="w-form-note">Goes directly to Daryl. No spam.</div>`;
 }
-
-function renderResult(el) {
-  const gate = GATE_TYPES.find(g => g.id === state.gateType);
-  const style = STYLES.find(s => s.id === state.style);
-  const colour = COLOURS.find(c => c.id === state.colour);
-  const height = HEIGHTS.find(h => h.id === state.height);
-  const width = WIDTHS.find(w => w.id === state.width);
-  const slope = SLOPE_OPTIONS.find(s => s.id === state.slope);
-  const job = JOB_TYPES.find(j => j.id === state.jobType);
-  const prop = PROPERTY_TYPES.find(p => p.id === state.propertyType);
-  const time = TIMEFRAMES.find(t => t.id === state.timeframe);
-  const extrasData = state.extras.map(id => EXTRAS.find(e => e.id === id));
+function rResult(el){
+  const gate=GATES.find(g=>g.id===S.gate),style=STYLES.find(s=>s.id===S.style);
+  const colour=COLOURS.find(c=>c.id===S.colour),height=HEIGHTS.find(h=>h.id===S.height);
+  const width=WIDTHS.find(w=>w.id===S.width),slope=SLOPES.find(s=>s.id===S.slope);
+  const job=JOBS.find(j=>j.id===S.job),prop=PROPS.find(p=>p.id===S.prop);
+  const time=TIMES.find(t=>t.id===S.time);
+  const exData=S.extras.map(id=>EXTRAS.find(e=>e.id===id));
+  const price=calcPrice();
+  const exStr=exData.length?exData.map(e=>e.name).join(', '):'None';
+  const fname=S.contact.name?', '+S.contact.name.split(' ')[0]:'';
+  const urgent=S.time==='asap'?'<div class="w-urgency">🔥 Priority</div>':'';
   
-  // Price calc
-  let total;
-  if (job.priceOverride) {
-    total = job.priceOverride;
-  } else {
-    const base = gate.basePrice + style.priceAdd;
-    total = Math.round(base * height.multiplier * width.multiplier);
-  }
+  const emailNotice=emailSent
+    ?'<div class="w-email-sent"><span class="w-email-sent-icon">✅</span><div class="w-email-sent-text">Your details have been sent to Daryl — he\'ll be in touch shortly!</div></div>'
+    :(API_KEY?'<div class="w-email-sent" style="border-color:#c4564a;background:rgba(196,86,74,0.05)"><span class="w-email-sent-icon">⚠️</span><div class="w-email-sent-text" style="color:#c4564a">Email send failed — call Daryl directly instead</div></div>':'');
   
-  total += slope.priceAdd;
-  if (state.colour === 'custom') total += 200;
-  if (state.propertyType === 'commercial') total = Math.round(total * 1.2);
-  
-  const extrasTotal = extrasData.reduce((sum, e) => sum + e.price, 0);
-  total += extrasTotal;
-  
-  const low = Math.round(total * 0.9);
-  const high = Math.round(total * 1.15);
-  
-  const extrasStr = extrasData.length > 0 ? extrasData.map(e => e.name).join(', ') : 'None';
-  
-  const urgencyBadge = state.timeframe === 'asap' 
-    ? '<div style="background:#e8a838;color:#1a1a2e;display:inline-block;padding:3px 10px;border-radius:6px;font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-top:8px">🔥 Priority Request</div>' 
-    : '';
-  
-  el.innerHTML = `
-    <div class="section-title">Your Estimate${state.contact.name ? ', ' + state.contact.name.split(' ')[0] : ''}</div>
-    <div class="section-subtitle">Indicative pricing — Daryl will confirm after a site check.</div>
-    
-    <div class="result-card">
-      <div class="result-label">Estimated Range</div>
-      <div class="result-price">$${low.toLocaleString()} – $${high.toLocaleString()}</div>
-      <div class="result-note">Supply, fabrication & installation</div>
-      ${urgencyBadge}
-    </div>
-    
-    <div class="summary-card">
-      <div class="summary-title">Your Selections</div>
-      <div class="summary-row"><span class="summary-key">Gate</span><span class="summary-val">${gate.name}</span></div>
-      <div class="summary-row"><span class="summary-key">Style</span><span class="summary-val">${style.name}</span></div>
-      <div class="summary-row"><span class="summary-key">Colour</span><span class="summary-val">${colour.name}</span></div>
-      <div class="summary-row"><span class="summary-key">Height</span><span class="summary-val">${height.label}</span></div>
-      <div class="summary-row"><span class="summary-key">Width</span><span class="summary-val">${width.label}</span></div>
-      <div class="summary-row"><span class="summary-key">Slope</span><span class="summary-val">${slope.name}</span></div>
-      <div class="summary-row"><span class="summary-key">Job Type</span><span class="summary-val">${job.name}</span></div>
-      <div class="summary-row"><span class="summary-key">Property</span><span class="summary-val">${prop.name}</span></div>
-      <div class="summary-row"><span class="summary-key">Timeframe</span><span class="summary-val">${time.name}</span></div>
-      <div class="summary-row"><span class="summary-key">Extras</span><span class="summary-val">${extrasStr}</span></div>
-    </div>
-    
-    <div class="cta-card">
-      <div class="cta-title">Ready for your exact quote?</div>
-      <div class="cta-subtitle">Call Daryl now or he'll be in touch based on the details you've provided.</div>
-      <div class="cta-buttons">
-        <a href="tel:+61435817147" class="btn btn-call">📞 Call Daryl</a>
-        <a href="https://gateworld.com.au/quick-quote/" class="btn btn-quote" target="_blank">Request Quote</a>
-      </div>
-    </div>
-    
-    <div class="start-over" onclick="reset()">Start over</div>
-  `;
+  el.innerHTML=`<div class="w-title">Your Estimate${fname}</div>
+    <div class="w-subtitle">Indicative — Daryl confirms after site check.</div>
+    ${emailNotice}
+    <div class="w-result"><div class="w-rlabel">Estimated Range</div>
+    <div class="w-rprice">$${price.low.toLocaleString()} – $${price.high.toLocaleString()}</div>
+    <div class="w-rnote">Supply, fabrication & installation</div>${urgent}</div>
+    <div class="w-summary"><div class="w-stitle">Your Selections</div>
+    <div class="w-srow"><span class="w-skey">Gate</span><span class="w-sval">${gate.name}</span></div>
+    <div class="w-srow"><span class="w-skey">Style</span><span class="w-sval">${style.name}</span></div>
+    <div class="w-srow"><span class="w-skey">Colour</span><span class="w-sval">${colour.name}</span></div>
+    <div class="w-srow"><span class="w-skey">Height</span><span class="w-sval">${height.label}</span></div>
+    <div class="w-srow"><span class="w-skey">Width</span><span class="w-sval">${width.label}</span></div>
+    <div class="w-srow"><span class="w-skey">Slope</span><span class="w-sval">${slope.name}</span></div>
+    <div class="w-srow"><span class="w-skey">Job</span><span class="w-sval">${job.name}</span></div>
+    <div class="w-srow"><span class="w-skey">Property</span><span class="w-sval">${prop.name}</span></div>
+    <div class="w-srow"><span class="w-skey">Timeframe</span><span class="w-sval">${time.name}</span></div>
+    <div class="w-srow"><span class="w-skey">Extras</span><span class="w-sval">${exStr}</span></div>
+    ${S.contact.suburb?`<div class="w-srow"><span class="w-skey">Suburb</span><span class="w-sval">${S.contact.suburb}</span></div>`:''}</div>
+    <div class="w-cta"><div class="w-cta-title">Want your exact quote faster?</div>
+    <div class="w-cta-sub">Call Daryl directly — he already has your details.</div>
+    <div class="w-cta-btns"><a href="tel:+61435817147" class="w-btn w-btn-call">📞 Call Daryl</a></div></div>
+    <div class="w-startover" onclick="wReset()">Start over</div>`;
 }
-
-// ─── ACTIONS ───
-function select(key, val) { state[key] = val; render(); }
-function toggleExtra(id) {
-  state.extras = state.extras.includes(id) ? state.extras.filter(e => e !== id) : [...state.extras, id];
-  render();
-}
-function updateContact(field, val) {
-  state.contact[field] = val;
-  // Don't re-render the whole thing (would lose focus), just update nav
-  const nav = document.getElementById('nav');
-  const canProceed = state.contact.name && state.contact.phone;
-  const hasBack = state.step > 0;
-  nav.innerHTML = `<div class="nav-row has-back">
-    <button class="btn btn-secondary" onclick="goBack()">← Back</button>
-    <button class="btn btn-primary" onclick="goNext()" ${!canProceed ? 'disabled' : ''}>See My Estimate →</button>
-  </div>`;
-}
-
-function goNext() {
-  const card = document.getElementById('mainCard');
-  card.classList.add('animating');
-  setTimeout(() => { state.step++; render(); card.classList.remove('animating'); }, 200);
-}
-function goBack() {
-  const card = document.getElementById('mainCard');
-  card.classList.add('animating');
-  setTimeout(() => { state.step--; render(); card.classList.remove('animating'); }, 200);
-}
-function reset() {
-  state = { step: 0, gateType: null, style: null, colour: null, height: null, width: null, slope: null, jobType: null, propertyType: null, timeframe: null, extras: [], contact: { name: '', phone: '', email: '', suburb: '' } };
-  render();
-}
-
-// ─── INIT ───
-render();
 </script>
 </body>
 </html>
