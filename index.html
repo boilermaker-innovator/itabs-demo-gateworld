@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ============================================================
+     GATEWORLD PERTH — Quote Estimator Widget
+     Config-driven template by iTabs
+     ============================================================ -->
+
+<script>
+const WIDGET_CONFIG = {
+
+  // ── BUSINESS INFO ──────────────────────────────────────
+  business: {
+    name: "Gateworld Perth",
+    tagline: "Gates, Automation & Access Control",
+    phone: "",
+    email: "",
+    logo: "",
+    website: "https://gateworld.com.au",
+    socials: {
+      facebook: "https://facebook.com/gateworldperth",
+      instagram: "",
+    }
+  },
+
+  // ── BRANDING ───────────────────────────────────────────
+  branding: {
+    primaryColor: "#1a1a2e",
+    secondaryColor: "#16213e",
+    accentColor: "#e2b857",
+    backgroundColor: "#f4f3ef",
+    cardBackground: "#ffffff",
+    textColor: "#1a1a1a",
+    lightText: "#666666",
+    fontFamily: "'DM Sans', sans-serif",
+    borderRadius: "16px",
+  },
+
+  // ── META / SOCIAL PREVIEW ──────────────────────────────
+  meta: {
+    title: "How much is my gate? | Gateworld Perth",
+    description: "Get a quick ballpark estimate for your new gate in under 2 minutes. No obligation, no hassle.",
+    image: "",
+    url: "",
+  },
+
+  // ── CALL TO ACTION ─────────────────────────────────────
+  cta: {
+    headline: "How much is my gate?",
+    subheadline: "Get a ballpark estimate in under 2 minutes",
+    buttonText: "💰 Find Out Now",
+    icon: "💰",
+    disclaimer: "Estimates are approximate. Final pricing confirmed after site inspection.",
+  },
+
+  // ── STEPS ──────────────────────────────────────────────
+  steps: [
+    {
+      id: "gate_type",
+      title: "What type of gate?",
+      subtitle: "Select the gate that suits your property",
+      type: "select",
+      options: [
+        { label: "Sliding Gate", icon: "◀▶", value: "sliding" },
+        { label: "Single Swing", icon: "🚪", value: "single_swing" },
+        { label: "Double Swing", icon: "📖", value: "double_swing" },
+        { label: "Pedestrian Gate", icon: "🚶", value: "pedestrian" },
+      ]
+    },
+    {
+      id: "style",
+      title: "What style?",
+      subtitle: "Choose the look you're after",
+      type: "select",
+      options: [
+        { label: "Aluminium Slat", icon: "▤", value: "slat", tag: "Popular" },
+        { label: "Picket", icon: "▥", value: "picket" },
+        { label: "Batten", icon: "▦", value: "batten" },
+        { label: "Vertical Blade", icon: "▮", value: "blade" },
+      ]
+    },
+    {
+      id: "colour",
+      title: "What colour?",
+      subtitle: "Colorbond & powder coat options",
+      type: "select",
+      columns: 3,
+      options: [
+        { label: "Monument", icon: "⬛", value: "monument" },
+        { label: "Woodland Grey", icon: "🟫", value: "woodland_grey" },
+        { label: "Basalt", icon: "⬛", value: "basalt" },
+        { label: "Surfmist", icon: "⬜", value: "surfmist" },
+        { label: "Night Sky", icon: "🌑", value: "night_sky" },
+        { label: "Pale Eucalypt", icon: "🟩", value: "pale_eucalypt" },
+        { label: "Paperbark", icon: "🟨", value: "paperbark" },
+        { label: "Ironstone", icon: "🟤", value: "ironstone" },
+        { label: "Custom RAL", icon: "🎨", value: "custom_ral" },
+      ]
+    },
+    {
+      id: "height",
+      title: "How high?",
+      subtitle: "Standard residential is 1800mm",
+      type: "select",
+      options: [
+        { label: "1200mm", icon: "📏", value: "1200" },
+        { label: "1500mm", icon: "📏", value: "1500" },
+        { label: "1800mm", icon: "📏", value: "1800", tag: "Standard" },
+        { label: "2100mm+", icon: "📏", value: "2100" },
+      ]
+    },
+    {
+      id: "width",
+      title: "Opening width?",
+      subtitle: "Measure the gap the gate needs to cover",
+      type: "select",
+      options: [
+        { label: "Up to 3m", icon: "↔️", value: "3m" },
+        { label: "3m – 4m", icon: "↔️", value: "4m" },
+        { label: "4m – 5m", icon: "↔️", value: "5m" },
+        { label: "5m – 6m+", icon: "↔️", value: "6m" },
+      ]
+    },
+    {
+      id: "slope",
+      title: "Is your driveway on a slope?",
+      subtitle: "This affects the install method",
+      type: "select",
+      options: [
+        { label: "Flat", icon: "➖", value: "flat" },
+        { label: "Slight Slope", icon: "📐", value: "slight" },
+        { label: "Steep Slope", icon: "⛰️", value: "steep" },
+        { label: "Not Sure", icon: "❓", value: "unsure" },
+      ]
+    },
+    {
+      id: "job_type",
+      title: "What kind of job?",
+      subtitle: "New install or working with existing?",
+      type: "select",
+      options: [
+        { label: "New Install", icon: "🆕", value: "new" },
+        { label: "Replace Gate", icon: "🔄", value: "replace" },
+        { label: "Replace Motor", icon: "⚙️", value: "motor_only" },
+        { label: "Automate Existing", icon: "🤖", value: "automate" },
+      ]
+    },
+    {
+      id: "property_type",
+      title: "Property type?",
+      subtitle: "Helps us understand access and requirements",
+      type: "select",
+      options: [
+        { label: "Residential", icon: "🏠", value: "residential" },
+        { label: "Commercial", icon: "🏢", value: "commercial" },
+        { label: "Strata / Body Corp", icon: "🏘️", value: "strata" },
+      ]
+    },
+    {
+      id: "timeframe",
+      title: "When do you need it?",
+      subtitle: "Helps us plan our schedule",
+      type: "select",
+      options: [
+        { label: "ASAP", icon: "⚡", value: "asap" },
+        { label: "This Month", icon: "📅", value: "month" },
+        { label: "Still Planning", icon: "📋", value: "planning" },
+        { label: "Getting Quotes", icon: "🔍", value: "quotes" },
+      ]
+    },
+    {
+      id: "extras",
+      title: "Any extras?",
+      subtitle: "Select all that apply — or skip this step",
+      type: "multi_select",
+      optional: true,
+      options: [
+        { label: "Gate Motor", icon: "⚡", value: "motor" },
+        { label: "Intercom System", icon: "📞", value: "intercom" },
+        { label: "Keypad Access", icon: "🔢", value: "keypad" },
+        { label: "Extra Remotes (×2)", icon: "📡", value: "remotes" },
+        { label: "Safety Beams", icon: "🔴", value: "safety_beams" },
+        { label: "Matching Ped Gate", icon: "🚶", value: "ped_gate" },
+      ]
+    },
+  ],
+
+  // ── PRICING LOGIC ──────────────────────────────────────
+  pricing: {
+    mode: "custom", // use custom calculate function below
+    rangePercent: 15,
+    minimumPrice: 800,
+  },
+
+  // Custom pricing function — called instead of generic calc
+  calculatePrice: function(answers) {
+    // Base prices by gate type
+    const gateBase = {
+      sliding: 2800,
+      single_swing: 2200,
+      double_swing: 3200,
+      pedestrian: 1200,
+    };
+
+    // Style add-ons
+    const styleAdd = {
+      slat: 0,
+      picket: 200,
+      batten: 300,
+      blade: 400,
+    };
+
+    // Height multipliers
+    const heightMult = {
+      "1200": 0.8,
+      "1500": 0.9,
+      "1800": 1.0,
+      "2100": 1.2,
+    };
+
+    // Width multipliers
+    const widthMult = {
+      "3m": 1.0,
+      "4m": 1.15,
+      "5m": 1.3,
+      "6m": 1.5,
+    };
+
+    // Slope multipliers
+    const slopeMult = {
+      flat: 1.0,
+      slight: 1.1,
+      steep: 1.25,
+      unsure: 1.1,
+    };
+
+    // Job type adjustments
+    const jobAdd = {
+      new: 0,
+      replace: 500,
+      motor_only: -1800, // much cheaper — just motor work
+      automate: -800,    // existing gate, just add motor
+    };
+
+    // Property type multiplier
+    const propMult = {
+      residential: 1.0,
+      commercial: 1.2,
+      strata: 1.15,
+    };
+
+    // Extras pricing
+    const extrasPrice = {
+      motor: 800,
+      intercom: 600,
+      keypad: 350,
+      remotes: 120,
+      safety_beams: 250,
+      ped_gate: 1200,
+    };
+
+    // Custom colour premium
+    const colourAdd = answers.colour === 'custom_ral' ? 300 : 0;
+
+    // Calculate
+    let base = (gateBase[answers.gate_type] || 2800);
+    base += (styleAdd[answers.style] || 0);
+    base += colourAdd;
+    base *= (heightMult[answers.height] || 1);
+    base *= (widthMult[answers.width] || 1);
+    base *= (slopeMult[answers.slope] || 1);
+    base *= (propMult[answers.property_type] || 1);
+    base += (jobAdd[answers.job_type] || 0);
+
+    // Add extras
+    const selectedExtras = answers.extras || [];
+    if (Array.isArray(selectedExtras)) {
+      selectedExtras.forEach(e => {
+        base += (extrasPrice[e] || 0);
+      });
+    }
+
+    base = Math.max(base, 800);
+
+    const range = base * 0.15;
+    return {
+      low: Math.round((base - range) / 50) * 50,
+      high: Math.round((base + range) / 50) * 50,
+      estimate: Math.round(base),
+    };
+  },
+
+  // ── LEAD CAPTURE ───────────────────────────────────────
+  leadCapture: {
+    enabled: true,
+    fields: ["name", "phone", "email", "suburb", "notes"],
+    requiredFields: ["name", "phone"],
+    heading: "Almost there! Here's your estimate.",
+    subheading: "Leave your details and Daryl will get back to you.",
+    submitText: "Send My Details",
+    successMessage: "Thanks! Daryl will be in touch within 24 hours.",
+    web3formsKey: "99a11c15-5c61-4765-99c5-673adec64b16",
+    notifyEmail: "responses@itabs.ai",
+  },
+
+  // ── SOCIAL PROOF ───────────────────────────────────────
+  socialProof: {
+    enabled: true,
+    rating: 5.0,
+    reviewCount: 48,
+    badges: ["Licensed & Insured", "Perth Local", "Free Site Visits"],
+  },
+};
+</script>
+
+<title>How much is my gate? | Gateworld Perth</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --primary: #1a1a2e;
+  --secondary: #16213e;
+  --accent: #e2b857;
+  --bg: #f4f3ef;
+  --card-bg: #ffffff;
+  --text: #1a1a1a;
+  --light-text: #666666;
+  --radius: 16px;
+  --font: 'DM Sans', sans-serif;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: var(--font);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── HEADER ── */
+.widget-header {
+  width: 100%;
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  padding: 24px 20px 32px;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.widget-header::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 70%, rgba(226,184,87,0.08) 0%, transparent 50%);
+  pointer-events: none;
+}
+
+.business-name {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0.85;
+  margin-bottom: 8px;
+}
+
+.business-logo { max-height: 40px; margin-bottom: 8px; }
+
+.cta-icon {
+  font-size: 36px;
+  margin-bottom: 8px;
+  display: block;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+.cta-headline {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  line-height: 1.2;
+}
+
+.cta-subheadline {
+  font-size: 15px;
+  opacity: 0.8;
+  font-weight: 400;
+}
+
+/* ── SOCIAL PROOF BAR ── */
+.social-proof {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background: white;
+  border-bottom: 1px solid #e8e8e8;
+  flex-wrap: wrap;
+  font-size: 13px;
+  color: var(--light-text);
+}
+
+.rating { color: #e2b857; font-weight: 600; }
+.stars { color: #e2b857; letter-spacing: 1px; }
+.badge {
+  background: #f4f3ef;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* ── PROGRESS BAR ── */
+.progress-container {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px 20px 0;
+}
+
+.progress-bar {
+  height: 6px;
+  background: #e0e0e0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  border-radius: 3px;
+  transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.progress-text {
+  font-size: 12px;
+  color: var(--light-text);
+  margin-top: 6px;
+  text-align: right;
+}
+
+/* ── MAIN CARD ── */
+.widget-body {
+  width: 100%;
+  max-width: 500px;
+  padding: 20px;
+  flex: 1;
+}
+
+.step-card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 28px 24px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.03);
+  animation: fadeUp 0.35s ease-out;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.step-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.step-subtitle {
+  font-size: 14px;
+  color: var(--light-text);
+  margin-bottom: 20px;
+}
+
+/* ── OPTIONS GRID ── */
+.options-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.options-grid.cols-3 {
+  grid-template-columns: 1fr 1fr 1fr;
+}
+
+.option-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 16px 10px;
+  border: 2px solid #e8e8e8;
+  border-radius: 12px;
+  background: white;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: var(--font);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text);
+  text-align: center;
+  min-height: 68px;
+  position: relative;
+}
+
+.option-btn:hover {
+  border-color: var(--primary);
+  background: #f5f5fa;
+}
+
+.option-btn.selected {
+  border-color: var(--primary);
+  background: linear-gradient(135deg, #eef0f8, #f0f0fa);
+  box-shadow: 0 0 0 1px var(--primary);
+}
+
+.option-icon {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.option-tag {
+  position: absolute;
+  top: -8px;
+  right: -4px;
+  background: var(--accent);
+  color: var(--primary);
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* ── MULTI-SELECT ── */
+.option-btn.multi .check-indicator {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 20px;
+  height: 20px;
+  border: 2px solid #ddd;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  transition: all 0.2s;
+}
+
+.option-btn.multi.selected .check-indicator {
+  background: var(--primary);
+  border-color: var(--primary);
+  color: white;
+}
+
+.skip-btn {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 12px;
+  padding: 10px;
+  background: none;
+  border: none;
+  font-family: var(--font);
+  font-size: 14px;
+  color: var(--light-text);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.skip-btn:hover { color: var(--text); }
+
+/* ── NAV BUTTONS ── */
+.nav-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  gap: 12px;
+}
+
+.btn {
+  padding: 14px 28px;
+  border-radius: 12px;
+  border: none;
+  font-family: var(--font);
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-back {
+  background: #f0f0f0;
+  color: var(--light-text);
+}
+.btn-back:hover { background: #e0e0e0; }
+
+.btn-next {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  flex: 1;
+  box-shadow: 0 4px 12px rgba(26, 26, 46, 0.25);
+}
+
+.btn-next:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(26, 26, 46, 0.35);
+}
+
+.btn-next:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── START SCREEN ── */
+.start-btn {
+  display: block;
+  width: 100%;
+  padding: 18px;
+  margin-top: 24px;
+  background: linear-gradient(135deg, var(--accent), #d4a840);
+  color: var(--primary);
+  border: none;
+  border-radius: 14px;
+  font-family: var(--font);
+  font-size: 17px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 16px rgba(226, 184, 87, 0.35);
+}
+
+.start-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(226, 184, 87, 0.45);
+}
+
+/* ── ESTIMATE DISPLAY ── */
+.estimate-display {
+  text-align: center;
+  padding: 24px 16px;
+  background: linear-gradient(135deg, #f7f3e8, #faf6ec);
+  border-radius: 14px;
+  margin-bottom: 20px;
+  border: 1px solid rgba(226, 184, 87, 0.2);
+}
+
+.estimate-label {
+  font-size: 13px;
+  color: var(--light-text);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.estimate-range {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--primary);
+  line-height: 1.2;
+}
+
+.estimate-note {
+  font-size: 12px;
+  color: var(--light-text);
+  margin-top: 6px;
+}
+
+/* ── SELECTIONS SUMMARY ── */
+.selections-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.selection-chip {
+  background: #f0f0f5;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* ── LEAD FORM ── */
+.form-field { margin-bottom: 14px; }
+
+.form-field label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 5px;
+  color: var(--text);
+}
+
+.form-field label .req { color: #d32f2f; }
+
+.form-field input,
+.form-field textarea {
+  width: 100%;
+  padding: 12px 14px;
+  border: 2px solid #e8e8e8;
+  border-radius: 10px;
+  font-family: var(--font);
+  font-size: 15px;
+  color: var(--text);
+  transition: border-color 0.2s;
+  background: white;
+}
+
+.form-field input:focus,
+.form-field textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.form-field textarea { height: 70px; resize: vertical; }
+
+.submit-btn {
+  display: block;
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--accent), #d4a840);
+  color: var(--primary);
+  border: none;
+  border-radius: 12px;
+  font-family: var(--font);
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  box-shadow: 0 4px 12px rgba(226, 184, 87, 0.3);
+  margin-top: 8px;
+}
+
+.submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(226, 184, 87, 0.4);
+}
+
+/* ── SUCCESS SCREEN ── */
+.success-screen { text-align: center; padding: 40px 20px; }
+
+.success-icon { font-size: 56px; margin-bottom: 16px; display: block; }
+
+.success-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+
+.success-message {
+  font-size: 15px;
+  color: var(--light-text);
+  margin-bottom: 24px;
+  line-height: 1.5;
+}
+
+.contact-links {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.contact-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: #f0f0f5;
+  color: var(--primary);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.contact-link:hover { background: #e0e0ea; }
+
+/* ── FOOTER ── */
+.widget-footer {
+  width: 100%;
+  text-align: center;
+  padding: 16px 20px 24px;
+  font-size: 11px;
+  color: #aaa;
+}
+
+.widget-footer a { color: #999; text-decoration: none; }
+
+.disclaimer {
+  font-size: 11px;
+  color: #aaa;
+  text-align: center;
+  margin-top: 16px;
+  line-height: 1.4;
+}
+
+.hidden { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="widget-header" id="header">
+  <div class="business-name" id="businessName"></div>
+  <span class="cta-icon" id="ctaIcon"></span>
+  <div class="cta-headline" id="ctaHeadline"></div>
+  <div class="cta-subheadline" id="ctaSubheadline"></div>
+</div>
+
+<div class="social-proof" id="socialProof"></div>
+
+<div class="progress-container" id="progressContainer">
+  <div class="progress-bar">
+    <div class="progress-fill" id="progressFill"></div>
+  </div>
+  <div class="progress-text" id="progressText"></div>
+</div>
+
+<div class="widget-body" id="widgetBody"></div>
+
+<div class="widget-footer">
+  <span>Powered by <a href="https://itabs.ai" target="_blank"><strong>iTabs</strong></a></span>
+</div>
+
+<script>
+const C = WIDGET_CONFIG;
+let currentStep = -1;
+let answers = {};
+
+// ── INIT ──────────────────────────────────────────────
+function init() {
+  // Apply branding
+  const r = document.documentElement.style;
+  r.setProperty('--primary', C.branding.primaryColor);
+  r.setProperty('--secondary', C.branding.secondaryColor);
+  r.setProperty('--accent', C.branding.accentColor);
+  r.setProperty('--bg', C.branding.backgroundColor);
+  r.setProperty('--card-bg', C.branding.cardBackground);
+  r.setProperty('--text', C.branding.textColor);
+  r.setProperty('--light-text', C.branding.lightText);
+  r.setProperty('--radius', C.branding.borderRadius);
+  r.setProperty('--font', C.branding.fontFamily);
+
+  // Meta tags
+  document.title = C.meta.title || `${C.cta.headline} | ${C.business.name}`;
+  setMeta('description', C.meta.description);
+  setMeta('og:title', C.meta.title, 'property');
+  setMeta('og:description', C.meta.description, 'property');
+  if (C.meta.image) setMeta('og:image', C.meta.image, 'property');
+  if (C.meta.url) setMeta('og:url', C.meta.url, 'property');
+  setMeta('og:type', 'website', 'property');
+
+  // Header
+  document.getElementById('businessName').textContent = C.business.name;
+  document.getElementById('ctaIcon').textContent = C.cta.icon;
+  document.getElementById('ctaHeadline').textContent = C.cta.headline;
+  document.getElementById('ctaSubheadline').textContent = C.cta.subheadline;
+
+  if (C.business.logo) {
+    const img = document.createElement('img');
+    img.src = C.business.logo;
+    img.className = 'business-logo';
+    img.alt = C.business.name;
+    const nameEl = document.getElementById('businessName');
+    nameEl.parentNode.insertBefore(img, nameEl);
+    nameEl.style.display = 'none';
+  }
+
+  // Social proof
+  if (C.socialProof.enabled) {
+    const sp = document.getElementById('socialProof');
+    const stars = '★'.repeat(Math.floor(C.socialProof.rating));
+    sp.innerHTML = `
+      <span class="stars">${stars}</span>
+      <span class="rating">${C.socialProof.rating} from ${C.socialProof.reviewCount} reviews</span>
+      ${C.socialProof.badges.map(b => `<span class="badge">${b}</span>`).join('')}
+    `;
+  } else {
+    document.getElementById('socialProof').classList.add('hidden');
+  }
+
+  document.getElementById('progressContainer').classList.add('hidden');
+  renderStartScreen();
+}
+
+function setMeta(name, content, attr = 'name') {
+  let el = document.querySelector(`meta[${attr}="${name}"]`);
+  if (!el) { el = document.createElement('meta'); el.setAttribute(attr, name); document.head.appendChild(el); }
+  el.setAttribute('content', content);
+}
+
+// ── START SCREEN ──────────────────────────────────────
+function renderStartScreen() {
+  document.getElementById('widgetBody').innerHTML = `
+    <div class="step-card">
+      <div style="text-align:center; padding: 8px 0;">
+        <p style="font-size:15px; color:var(--light-text); line-height:1.6; margin-bottom:4px;">
+          Answer ${C.steps.length} quick questions and we'll give you a ballpark estimate — no obligation.
+        </p>
+        <button class="start-btn" onclick="startQuote()">${C.cta.buttonText} →</button>
+        <p class="disclaimer">${C.cta.disclaimer}</p>
+      </div>
+    </div>
+  `;
+}
+
+function startQuote() {
+  currentStep = 0;
+  document.getElementById('progressContainer').classList.remove('hidden');
+  renderStep();
+}
+
+// ── RENDER STEP ───────────────────────────────────────
+function renderStep() {
+  const step = C.steps[currentStep];
+  const totalSteps = C.steps.length;
+  const pct = ((currentStep + 1) / (totalSteps + 1)) * 100;
+
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressText').textContent = `Step ${currentStep + 1} of ${totalSteps}`;
+
+  const body = document.getElementById('widgetBody');
+  let optionsHtml = '';
+  const colsClass = step.columns === 3 ? 'cols-3' : '';
+
+  if (step.type === 'select') {
+    optionsHtml = `<div class="options-grid ${colsClass}">`;
+    step.options.forEach(opt => {
+      const sel = answers[step.id] === opt.value ? 'selected' : '';
+      const tag = opt.tag ? `<span class="option-tag">${opt.tag}</span>` : '';
+      optionsHtml += `
+        <button class="option-btn ${sel}" onclick="selectOption('${step.id}', '${opt.value}', this)">
+          ${tag}
+          <span class="option-icon">${opt.icon}</span>
+          <span>${opt.label}</span>
+        </button>`;
+    });
+    optionsHtml += '</div>';
+  } else if (step.type === 'multi_select') {
+    // Initialize array if not exists
+    if (!Array.isArray(answers[step.id])) answers[step.id] = [];
+    optionsHtml = `<div class="options-grid ${colsClass}">`;
+    step.options.forEach(opt => {
+      const sel = answers[step.id].includes(opt.value) ? 'selected' : '';
+      optionsHtml += `
+        <button class="option-btn multi ${sel}" onclick="toggleMulti('${step.id}', '${opt.value}', this)">
+          <span class="check-indicator">${sel ? '✓' : ''}</span>
+          <span class="option-icon">${opt.icon}</span>
+          <span>${opt.label}</span>
+        </button>`;
+    });
+    optionsHtml += '</div>';
+    if (step.optional) {
+      optionsHtml += `<button class="skip-btn" onclick="goNext()">Skip — no extras needed</button>`;
+    }
+  }
+
+  const backBtn = currentStep > 0
+    ? `<button class="btn btn-back" onclick="goBack()">← Back</button>`
+    : `<button class="btn btn-back" onclick="goToStart()">← Back</button>`;
+
+  const canProceed = step.type === 'multi_select' ? true : !!answers[step.id];
+
+  body.innerHTML = `
+    <div class="step-card">
+      <div class="step-title">${step.title}</div>
+      <div class="step-subtitle">${step.subtitle}</div>
+      ${optionsHtml}
+      <div class="nav-row">
+        ${backBtn}
+        <button class="btn btn-next" id="nextBtn" onclick="goNext()" ${!canProceed ? 'disabled' : ''}>
+          ${currentStep === totalSteps - 1 ? 'See My Estimate →' : 'Next →'}
+        </button>
+      </div>
+    </div>
+  `;
+}
+
+function selectOption(stepId, value, el) {
+  answers[stepId] = value;
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('nextBtn').disabled = false;
+  setTimeout(() => goNext(), 300);
+}
+
+function toggleMulti(stepId, value, el) {
+  if (!Array.isArray(answers[stepId])) answers[stepId] = [];
+  const idx = answers[stepId].indexOf(value);
+  if (idx > -1) {
+    answers[stepId].splice(idx, 1);
+    el.classList.remove('selected');
+    el.querySelector('.check-indicator').textContent = '';
+  } else {
+    answers[stepId].push(value);
+    el.classList.add('selected');
+    el.querySelector('.check-indicator').textContent = '✓';
+  }
+}
+
+function goNext() {
+  if (currentStep < C.steps.length - 1) {
+    currentStep++;
+    renderStep();
+  } else {
+    renderEstimate();
+  }
+}
+
+function goBack() {
+  if (currentStep > 0) { currentStep--; renderStep(); }
+}
+
+function goToStart() {
+  currentStep = -1;
+  document.getElementById('progressContainer').classList.add('hidden');
+  answers = {};
+  renderStartScreen();
+}
+
+// ── CALCULATE PRICE ───────────────────────────────────
+function calculateEstimate() {
+  if (C.calculatePrice) {
+    return C.calculatePrice(answers);
+  }
+  // Fallback generic calc would go here
+  return { low: 0, high: 0, estimate: 0 };
+}
+
+// ── RENDER ESTIMATE + LEAD FORM ───────────────────────
+function renderEstimate() {
+  const est = calculateEstimate();
+  const lc = C.leadCapture;
+
+  document.getElementById('progressFill').style.width = '100%';
+  document.getElementById('progressText').textContent = 'Your Estimate';
+
+  // Summary chips
+  let chipsHtml = '<div class="selections-summary">';
+  C.steps.forEach(step => {
+    const val = answers[step.id];
+    if (step.type === 'multi_select' && Array.isArray(val) && val.length > 0) {
+      val.forEach(v => {
+        const opt = step.options.find(o => o.value === v);
+        if (opt) chipsHtml += `<span class="selection-chip">${opt.icon} ${opt.label}</span>`;
+      });
+    } else if (val && typeof val === 'string') {
+      const opt = step.options.find(o => o.value === val);
+      if (opt) chipsHtml += `<span class="selection-chip">${opt.icon} ${opt.label}</span>`;
+    }
+  });
+  chipsHtml += '</div>';
+
+  // Form fields
+  const fieldConfig = {
+    name: { label: 'Your Name', type: 'text', placeholder: 'John Smith' },
+    phone: { label: 'Phone', type: 'tel', placeholder: '0400 000 000' },
+    email: { label: 'Email', type: 'email', placeholder: 'john@email.com' },
+    suburb: { label: 'Suburb', type: 'text', placeholder: 'e.g. Joondalup' },
+    notes: { label: 'Anything else?', type: 'textarea', placeholder: 'Access issues, special requirements, etc.' },
+  };
+
+  let fieldsHtml = '';
+  lc.fields.forEach(f => {
+    const fc = fieldConfig[f];
+    if (!fc) return;
+    const req = lc.requiredFields.includes(f);
+    const reqMark = req ? '<span class="req">*</span>' : '';
+    if (fc.type === 'textarea') {
+      fieldsHtml += `<div class="form-field"><label>${fc.label} ${reqMark}</label><textarea name="${f}" placeholder="${fc.placeholder}" ${req ? 'required' : ''}></textarea></div>`;
+    } else {
+      fieldsHtml += `<div class="form-field"><label>${fc.label} ${reqMark}</label><input type="${fc.type}" name="${f}" placeholder="${fc.placeholder}" ${req ? 'required' : ''}></div>`;
+    }
+  });
+
+  document.getElementById('widgetBody').innerHTML = `
+    <div class="step-card">
+      <div class="estimate-display">
+        <div class="estimate-label">Ballpark Estimate</div>
+        <div class="estimate-range">$${est.low.toLocaleString()} – $${est.high.toLocaleString()}</div>
+        <div class="estimate-note">Based on your selections below</div>
+      </div>
+      ${chipsHtml}
+      ${lc.enabled ? `
+        <div style="margin-top:8px;">
+          <div class="step-title" style="font-size:17px;">${lc.heading}</div>
+          <div class="step-subtitle">${lc.subheading}</div>
+          <div id="leadForm">
+            ${fieldsHtml}
+            <button class="submit-btn" onclick="submitLead()">${lc.submitText}</button>
+          </div>
+        </div>
+      ` : ''}
+      <div class="nav-row">
+        <button class="btn btn-back" onclick="currentStep=${C.steps.length - 1}; renderStep();">← Adjust</button>
+        <button class="btn btn-back" onclick="goToStart()">Start Over</button>
+      </div>
+      <p class="disclaimer">${C.cta.disclaimer}</p>
+    </div>
+  `;
+}
+
+// ── SUBMIT LEAD ───────────────────────────────────────
+async function submitLead() {
+  const lc = C.leadCapture;
+  const form = document.getElementById('leadForm');
+  const data = {};
+
+  lc.fields.forEach(f => {
+    const el = form.querySelector(`[name="${f}"]`);
+    if (el) data[f] = el.value.trim();
+  });
+
+  for (const f of lc.requiredFields) {
+    if (!data[f]) { alert(`Please fill in the ${f} field.`); return; }
+  }
+
+  // Build selections text
+  let selections = '';
+  C.steps.forEach(step => {
+    const val = answers[step.id];
+    if (step.type === 'multi_select' && Array.isArray(val) && val.length > 0) {
+      const labels = val.map(v => { const o = step.options.find(o => o.value === v); return o ? o.label : v; });
+      selections += `${step.title}: ${labels.join(', ')}\n`;
+    } else if (val && typeof val === 'string') {
+      const opt = step.options.find(o => o.value === val);
+      selections += `${step.title}: ${opt ? opt.label : val}\n`;
+    }
+  });
+
+  const est = calculateEstimate();
+
+  try {
+    const submitBtn = form.querySelector('.submit-btn');
+    submitBtn.textContent = 'Sending...';
+    submitBtn.disabled = true;
+
+    const payload = {
+      access_key: lc.web3formsKey,
+      subject: `New Gate Enquiry — ${C.business.name}`,
+      from_name: `${C.business.name} Quote Widget`,
+      to: lc.notifyEmail,
+      message: `
+NEW GATE ENQUIRY
+==================
+${Object.entries(data).map(([k, v]) => `${k.charAt(0).toUpperCase() + k.slice(1)}: ${v}`).join('\n')}
+
+SELECTIONS
+==================
+${selections}
+ESTIMATE SHOWN: $${est.low.toLocaleString()} – $${est.high.toLocaleString()}
+      `.trim(),
+      ...data,
+      estimate_range: `$${est.low} - $${est.high}`,
+      selections_summary: selections,
+    };
+
+    const res = await fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (res.ok) {
+      renderSuccess(data, est);
+    } else {
+      throw new Error('Submit failed');
+    }
+  } catch (err) {
+    console.error(err);
+    renderSuccess(data, est);
+  }
+}
+
+// ── SUCCESS SCREEN ────────────────────────────────────
+function renderSuccess(data, est) {
+  document.getElementById('progressContainer').classList.add('hidden');
+
+  let contactHtml = '';
+  if (C.business.phone) contactHtml += `<a href="tel:${C.business.phone}" class="contact-link">📞 Call Us</a>`;
+  if (C.business.socials.facebook) contactHtml += `<a href="${C.business.socials.facebook}" target="_blank" class="contact-link">📘 Facebook</a>`;
+  if (C.business.website) contactHtml += `<a href="${C.business.website}" target="_blank" class="contact-link">🌐 Website</a>`;
+
+  document.getElementById('widgetBody').innerHTML = `
+    <div class="step-card">
+      <div class="success-screen">
+        <span class="success-icon">✅</span>
+        <div class="success-title">${C.leadCapture.successMessage}</div>
+        <div class="success-message">
+          Your estimate of <strong>$${est.low.toLocaleString()} – $${est.high.toLocaleString()}</strong> has been sent along with your details.
+        </div>
+        ${contactHtml ? `<div class="contact-links">${contactHtml}</div>` : ''}
+      </div>
+      <div style="text-align:center; margin-top:16px;">
+        <button class="btn btn-back" onclick="goToStart()">Get Another Estimate</button>
+      </div>
+    </div>
+  `;
+}
+
+// ── GO ────────────────────────────────────────────────
+init();
+</script>
+
+</body>
+</html>
